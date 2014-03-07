@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
 
 /**
  * TYPOlight webCMS
@@ -17,7 +17,7 @@
  * @package    simple_event_registration 
  * @filesource
  */
-
+namespace FelixPfeiffer\SimpleEventRegitration;
 
 /**
  * Class ModuleSimpleEventAttendance
