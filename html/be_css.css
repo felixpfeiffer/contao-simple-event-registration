@@ -1,0 +1,31 @@
+.ser_overview {
+    margin-top: 0.5em;
+    padding-top: 0.5em;
+    border-top: 1px solid #cdcdcd;
+}
+.ser_overview table {
+    width: 99%;
+}
+.ser_overview td {
+    text-align: center;
+    width: 20%;
+    line-height: 2em;
+    color: #666966;
+}
+.ser_overview td.ser_label {
+    font-weight:bold;
+    font-size: 1em;
+}
+.ser_overview td .sig {
+    padding:3px 5px;
+    border-radius:4px;
+    display:block;
+    width: 80%;
+    margin: 0px auto;
+    color: #666966;
+}
+.ser_overview td .sig_red {background-color: #c55; color:#fff;}
+.ser_overview td .sig_yello {background-color: #f90;}
+.ser_overview td .sig_green {background-color: #8ab858; color:#fff;}
+
+.wtlist, .wtlist a  {color: #c55; }

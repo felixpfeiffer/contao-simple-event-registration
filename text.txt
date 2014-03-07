@@ -1,0 +1,41 @@
+Ihre Anmeldung für das Event ##event_title##
+
+Sie haben sich für das Event "##event_title##" (##event_date##) angemeldet.
+Folgende Daten wurden übergeben:
+Username: ##user_username##
+Vorname: ##user_firstname##
+Nachname: ##user_lastname##
+E-Mail: ##user_email##
+
+Anzahl: ##ser_quantity##
+
+Event Adresse: ##event_url##
+
+
+
+Sie wurden für das Event ##event_title##
+
+Sie haben sich für das Event "##event_title##" (##event_date##) angemeldet.
+Folgende Daten wurden übergeben:
+Username: ##user_username##
+Vorname: ##user_firstname##
+Nachname: ##user_lastname##
+E-Mail: ##user_email##
+
+Anzahl: ##ser_quantity##
+
+Event Adresse: ##event_url##
+
+
+
+Stornierung für das Event ##event_title##
+
+Ihre Anmeldung für das Event "##event_title##" (##event_date##) wurde auf Ihren Wunsch storniert.
+
+Folgende Daten wurden übergeben:
+Username: ##user_username##
+Vorname: ##user_firstname##
+Nachname: ##user_lastname##
+E-Mail: ##user_email##
+
+Event Adresse: ##event_url##
