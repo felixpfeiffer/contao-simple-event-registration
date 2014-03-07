@@ -35,10 +35,10 @@ $GLOBALS['BE_MOD']['content']['calendar']['serexportfields'] = array(
 	'user' => array('firstname','lastname','email'),
 	'anuser' => array('firstname','lastname','email'),
 	'event'=> array('title','date','url'),
-    'stylesheet' => 'system/modules/simple_event_registration/html/be_css.css'
+    'stylesheet' => 'system/modules/simple_event_registration/assets/be_css.css'
 );
 
-$GLOBALS['BE_MOD']['content']['calendar']['stylesheet'] = 'system/modules/simple_event_registration/html/be_css.css';
+$GLOBALS['BE_MOD']['content']['calendar']['stylesheet'] = 'system/modules/simple_event_registration/assets/be_css.css';
 
  
 $GLOBALS['FE_MOD']['events']['eventreader'] = 'ModuleSimpleEventRegistration';

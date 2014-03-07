@@ -31,14 +31,14 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['list']['sorting']['child_record_callba
 $GLOBALS['TL_DCA']['tl_calendar_events']['list']['operations']['registrations'] = array(
 	'label'               => &$GLOBALS['TL_LANG']['tl_calendar_events']['registrations'],
 	'href'                => 'table=tl_event_registrations',
-	'icon'                => 'system/modules/simple_event_registration/html/reg_user_list.png',
+	'icon'                => 'system/modules/simple_event_registration/assets/reg_user_list.png',
     'button_callback'     => array('tl_simple_event_registration', 'groupButton')
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['list']['operations']['serrecurring'] = array(
 	'label'               => &$GLOBALS['TL_LANG']['tl_calendar_events']['serrecurring'],
 	'href'                => 'key=splitRecurring',
-	'icon'                => 'system/modules/simple_event_registration/html/split_recurring.png',
+	'icon'                => 'system/modules/simple_event_registration/assets/split_recurring.png',
     'button_callback'     => array('tl_simple_event_registration', 'splitRecurringButton')
 );
  
@@ -165,7 +165,7 @@ class tl_simple_event_registration extends tl_calendar_events
 			// send to tl_form_auto editing => set formId as the id to edit 
 			return '<a href="'.$this->addToUrl($href.'&id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
 		} else {
-			return $this->generateImage('system/modules/simple_event_registration/html/reg_user_list_inaktiv.png', $label);
+			return $this->generateImage('system/modules/simple_event_registration/assets/reg_user_list_inaktiv.png', $label);
 		}
 	}
 	
