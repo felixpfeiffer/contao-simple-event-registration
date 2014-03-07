@@ -69,7 +69,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_register'] = array
 	'default'                 => '0',
 	'inputType'               => 'checkbox',
 	'filter'                  => true,
-	'eval'                    => array('submitOnChange'=>true)
+	'eval'                    => array('submitOnChange'=>true),
+    'sql'                     => "char(1) NOT NULL default '0'"
 );
 			
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_places'] = array
@@ -78,7 +79,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_places'] = array
 	'exclude'                 => true,
 	'inputType'               => 'text',
 	'default'				  => 10,
-	'eval'                    => array('tl_class'=>'w50')
+	'eval'                    => array('tl_class'=>'w50'),
+    'sql'                     => "int(10) unsigned NOT NULL default '0'"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_maxplaces'] = array
@@ -87,7 +89,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_maxplaces'] = array
 	'exclude'                 => true,
 	'inputType'               => 'text',
 	'default'				  => 10,
-	'eval'                    => array('tl_class'=>'w50')
+	'eval'                    => array('tl_class'=>'w50'),
+    'sql'                     => "int(10) unsigned NOT NULL default '0'"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_email'] = array
@@ -96,7 +99,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_email'] = array
 	'exclude'                 => true,
 	'search'                  => true,
 	'inputType'               => 'text',
-	'eval'                    => array('rgxp'=>'friendly', 'maxlength'=>255,'tl_class'=>'clr')
+	'eval'                    => array('rgxp'=>'friendly', 'maxlength'=>255,'tl_class'=>'clr'),
+    'sql'                     => "varchar(255) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_date'] = array
@@ -105,7 +109,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_date'] = array
 	'exclude'                 => true,
 	'default'                 => (time() + 604800),
 	'inputType'               => 'text',
-	'eval'                    => array('rgxp'=>'datim', 'datepicker'=>$this->getDatePickerString(), 'tl_class'=>'w50 wizard')
+	'eval'                    => array('rgxp'=>'datim', 'datepicker'=>$this->getDatePickerString(), 'tl_class'=>'w50 wizard'),
+    'sql'                     => "int(10) unsigned NOT NULL default '0'"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_groups'] = array
@@ -115,7 +120,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_groups'] = array
 	'inputType'               => 'checkbox',
 	'options_callback'        => array('tl_simple_event_registration','getGroups'),
 	/*'foreignKey'              => 'tl_member_group.name',*/
-	'eval'                    => array('multiple'=>true)
+	'eval'                    => array('multiple'=>true),
+    'sql'                     => "blob NULL"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_show'] = array
@@ -125,7 +131,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_show'] = array
 	'default'                 => '0',
 	'inputType'               => 'checkbox',
 	'filter'                  => true,
-	'eval'                    => array('submitOnChange'=>true)
+	'eval'                    => array('submitOnChange'=>true),
+    'sql'                     => "char(1) NOT NULL default '0'"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_showheadline'] = array
@@ -134,7 +141,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_showheadline'] = array
 	'exclude'                 => true,
 	'search'                  => true,
 	'inputType'               => 'text',
-	'eval'                    => array('maxlength'=>255,'tl_class'=>'clr')
+	'eval'                    => array('maxlength'=>255,'tl_class'=>'clr'),
+    'sql'                     => "varchar(255) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_showgroups'] = array
@@ -144,7 +152,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_showgroups'] = array
 	'inputType'               => 'checkbox',
 	'options_callback'        => array('tl_simple_event_registration','getGroups'),
 	/*'foreignKey'              => 'tl_member_group.name',*/
-	'eval'                    => array('multiple'=>true,'tl_class'=>'')
+	'eval'                    => array('multiple'=>true,'tl_class'=>''),
+    'sql'                     => "blob NULL"
 );
 
 /**

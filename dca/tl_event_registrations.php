@@ -42,7 +42,15 @@ $GLOBALS['TL_DCA']['tl_event_registrations'] = array
 		'doNotCopyRecords'			  => true,
 		'closed'			 		  => true,
 		'onload_callback'			  => array(array('tl_event_registrations','checkClosed')),
-		'onsubmit_callback'			  => array(array('tl_event_registrations','saveName'))
+		'onsubmit_callback'			  => array(array('tl_event_registrations','saveName')),
+        'sql' => array
+        (
+            'keys' => array
+            (
+                'id' => 'primary',
+                'pid' => 'index'
+            )
+        )
 	),
 
 	// List
@@ -105,13 +113,30 @@ $GLOBALS['TL_DCA']['tl_event_registrations'] = array
 	),
 
 	'fields' => array(
-		'userId' => array
+        'id' => array
+        (
+            'sql'                     => "int(10) unsigned NOT NULL auto_increment"
+        ),
+        'pid' => array
+        (
+            'sql'                     => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'sorting' => array
+        (
+            'sql'                     => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'tstamp' => array
+        (
+            'sql'                     => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'userId' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_event_registrations']['userId'],
 			'search'                  => true,
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array()
+			'eval'                    => array(),
+            'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
 		'anonym' => array
 		(
@@ -119,7 +144,8 @@ $GLOBALS['TL_DCA']['tl_event_registrations'] = array
 			'search'                  => true,
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array()
+			'eval'                    => array(),
+            'sql'                     => "char(1) NOT NULL default '0'"
 		),
 		'firstname' => array
 		(
@@ -127,7 +153,8 @@ $GLOBALS['TL_DCA']['tl_event_registrations'] = array
 			'search'                  => true,
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('tl_class'=>'w50')
+			'eval'                    => array('tl_class'=>'w50'),
+            'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'lastname' => array
 		(
@@ -135,7 +162,8 @@ $GLOBALS['TL_DCA']['tl_event_registrations'] = array
 			'search'                  => true,
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('tl_class'=>'w50','mandatory'=>true)
+			'eval'                    => array('tl_class'=>'w50','mandatory'=>true),
+            'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'email' => array
 		(
@@ -143,7 +171,8 @@ $GLOBALS['TL_DCA']['tl_event_registrations'] = array
 			'search'                  => true,
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('tl_class'=>'w50','rgxp'=>'email')
+			'eval'                    => array('tl_class'=>'w50','rgxp'=>'email'),
+            'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'quantity' => array
 		(
@@ -153,14 +182,16 @@ $GLOBALS['TL_DCA']['tl_event_registrations'] = array
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options_callback'		  => array('tl_event_registrations','listPlaces'),
-			'eval'                    => array('tl_class'=>'w50')
+			'eval'                    => array('tl_class'=>'w50'),
+            'sql'                     => "int(4) unsigned NOT NULL default '1'"
 		),
 		'waitinglist' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_event_registrations']['waitinglist'],
 			'search'                  => true,
 			'exclude'                 => true,
-			'inputType'               => 'checkbox'
+			'inputType'               => 'checkbox',
+            'sql'                     => "char(1) NOT NULL default '0'"
 		)
 	)
 );
