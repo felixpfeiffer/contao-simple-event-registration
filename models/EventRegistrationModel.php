@@ -32,4 +32,31 @@ class EventRegistrationModel extends \Model
 	 * @var string
 	 */
 	protected static $strTable = 'tl_event_registration';
+
+
+    /**
+     * Find all published FAQs by their parent IDs
+     *
+     * @param array $arrPids    An array of FAQ category IDs
+     * @param array $arrOptions An optional options array
+     *
+     * @return \Model\Collection|null A collection of models or null if there are no FAQs
+     */
+    public static function findByPid($intPid=false, array $arrOptions=array())
+    {
+        if (!$intPid)
+        {
+            return null;
+        }
+
+        $t = static::$strTable;
+        $arrColumns = array("$t.pid=?");
+
+        if (!isset($arrOptions['order']))
+        {
+            $arrOptions['order'] = "$t.tstamp";
+        }
+
+        return static::findBy($arrColumns, array($intPid), $arrOptions);
+    }
 }
