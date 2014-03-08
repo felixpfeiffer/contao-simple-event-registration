@@ -90,7 +90,7 @@ $GLOBALS['TL_DCA']['tl_calendar']['fields']['ser_wait_subject']  = array(
     'exculde'   => true,
     'inputType' => 'text',
     'eval'      => array('decodeEntities'=>false,'tl_class'=>'long'),
-    'sql'                     => "varchar(164) NOT NULL default '''"
+    'sql'                     => "varchar(164) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar']['fields']['ser_wait_text']  = array(

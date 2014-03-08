@@ -53,8 +53,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['palettes']['default'] = $GLOBALS['TL_D
 
 array_insert($GLOBALS['TL_DCA']['tl_calendar_events']['subpalettes'], 2, array
 	(
-			'ser_register'								=> 'ser_places,ser_maxplaces,ser_date,ser_email,ser_groups',
-			'ser_show'								=> 'ser_showheadline,ser_showgroups'
+			'ser_register'		=> 'ser_places,ser_maxplaces,ser_date,ser_email,ser_groups',
+			'ser_show'			=> 'ser_showheadline,ser_showgroups'
 	)
 );
 
@@ -70,7 +70,7 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_register'] = array
 	'inputType'               => 'checkbox',
 	'filter'                  => true,
 	'eval'                    => array('submitOnChange'=>true),
-    'sql'                     => "char(1) NOT NULL default '0'"
+    'sql'                     => "char(1) NOT NULL default ''"
 );
 			
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_places'] = array
@@ -132,7 +132,7 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_show'] = array
 	'inputType'               => 'checkbox',
 	'filter'                  => true,
 	'eval'                    => array('submitOnChange'=>true),
-    'sql'                     => "char(1) NOT NULL default '0'"
+    'sql'                     => "char(1) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_showheadline'] = array
