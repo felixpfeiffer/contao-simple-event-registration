@@ -251,7 +251,7 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 		if($this->checkRegistration($this->User->id,$objEvent->id) && !$_SESSION['TL_SER_REGISTERED'])
 		{
 			$objTemplate->blnShowForm = false;
-			$objTemplate->blnShowDiscardForm = true;
+			($objEvent->endTime <= time()) ? $objTemplate->blnShowDiscardForm = false : $objTemplate->blnShowDiscardForm = true; //check endtime
 			$isregistered = true;
 			$arrMess['message'] = $GLOBALS['TL_LANG']['MSC']['ser_regallready'];
 			$arrMess['message_class'] = " allready";
