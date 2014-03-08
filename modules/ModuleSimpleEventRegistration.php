@@ -64,18 +64,20 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 	{
 		parent::compile();
 		
-		if(FE_USER_LOGGED_IN){
-			
+		if(FE_USER_LOGGED_IN)
+        {
+
 			// Get current event
-			$objEvent = $this->Database->prepare("SELECT * FROM tl_calendar_events WHERE pid IN(" . implode(',', $this->cal_calendar) . ") AND (id=? OR alias=?)")
-									   ->execute((is_numeric($this->Input->get('events')) ? $this->Input->get('events') : 0), $this->Input->get('events'));
-			
+            $objEvent = \CalendarEventsModel::findPublishedByParentAndIdOrAlias($this->cal_calendar,$this->Input->get('events'));
+
+            if($objEvent === null) return false;
+
 			// If current event isn't a registration event, don't go on
 			if(!$objEvent->ser_register) {
 				$this->blnParseRegistration = false;
 			}
 			
-			// If current event isn't a registration event, don't go on
+			// If registrations should not be shown
 			if(!$objEvent->ser_show) {
 				$this->blnShowList = false;
 			}
@@ -84,7 +86,6 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 			$this->import('FrontendUser', 'User');
 			$arrRegGroups = deserialize($objEvent->ser_groups);
 			$arrShowGroups = deserialize($objEvent->ser_showgroups);
-			
 			if(is_array($arrRegGroups) && count(array_intersect($this->User->groups, $arrRegGroups)) < 1)
 			{
 				$this->blnParseRegistration = false;
@@ -130,11 +131,10 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 		$objTemplate->listid = 'simple_event_registration_list_table';
 		$objTemplate->listsummary = sprintf($GLOBALS['TL_LANG']['MSC']['ser_listsummary'],html_entity_decode($objEvent->title));
 		
-		$objRegistrations = $this->Database->prepare("SELECT * FROM tl_event_registrations WHERE pid=? ORDER BY tstamp DESC")->execute($objEvent->id);
-		
-		if($objRegistrations->numRows < 1)
-		{
+		$objRegistrations = \FelixPfeiffer\SimpleEventRegitration\EventRegistrationModel::findByPid($objEvent->id);
 
+		if($objRegistrations === null)
+		{
 			$objTemplate->blnShowList = false;
 			$objTemplate->listMessage = sprintf($GLOBALS['TL_LANG']['MSC']['ser_emptylist'],html_entity_decode($objEvent->title));
 		}
@@ -149,10 +149,10 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 				
 				if($objRegistrations->userId != 0)
 				{
+
+                    $objUser = \MemberModel::findByPk($objRegistrations->id);
 					
-					$objUser = $this->Database->prepare("SELECT firstname, lastname, email FROM tl_member WHERE id=?")->limit(1)->execute($objRegistrations->userId);
-					
-					if($objUser->numRows > 0)
+					if($objUser !== null)
 					{
 					
 						$arrReg['firstname'] = $objUser->firstname;

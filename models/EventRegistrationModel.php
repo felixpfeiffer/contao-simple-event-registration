@@ -35,9 +35,9 @@ class EventRegistrationModel extends \Model
 
 
     /**
-     * Find all published FAQs by their parent IDs
+     * Find all registrations for one event
      *
-     * @param array $arrPids    An array of FAQ category IDs
+     * @param integer $intId    The events ID
      * @param array $arrOptions An optional options array
      *
      * @return \Model\Collection|null A collection of models or null if there are no FAQs
@@ -54,9 +54,10 @@ class EventRegistrationModel extends \Model
 
         if (!isset($arrOptions['order']))
         {
-            $arrOptions['order'] = "$t.tstamp";
+            $arrOptions['order'] = "$t.tstamp DESC";
         }
 
         return static::findBy($arrColumns, array($intPid), $arrOptions);
     }
+
 }
