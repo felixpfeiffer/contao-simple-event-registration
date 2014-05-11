@@ -41,8 +41,8 @@ $GLOBALS['BE_MOD']['content']['calendar']['serexportfields'] = array(
 $GLOBALS['BE_MOD']['content']['calendar']['stylesheet'] = 'system/modules/simple_event_registration/assets/be_css.css';
 
  
-$GLOBALS['FE_MOD']['events']['eventreader'] = 'ModuleSimpleEventRegistration';
-$GLOBALS['FE_MOD']['events']['serattendance'] = 'ModuleSimpleEventAttendance';
+$GLOBALS['FE_MOD']['events']['eventreader'] = 'Subcolumns\\ModuleSimpleEventRegistration';
+$GLOBALS['FE_MOD']['events']['serattendance'] = 'Subcolumns\\ModuleSimpleEventAttendance';
 
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('SimpleEventRegistration', 'showPlaces');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('SimpleEventRegistration', 'showClasses');
