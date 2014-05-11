@@ -14,7 +14,7 @@
 /**
  * Run in a custom namespace, so the class can be replaced
  */
-namespace FelixPfeiffer\SimpleEventRegitration;
+namespace FelixPfeiffer\SimpleEventRegistration;
 
 
 /**
@@ -24,14 +24,14 @@ namespace FelixPfeiffer\SimpleEventRegitration;
  * @author    Leo Feyer <https://github.com/leofeyer>
  * @copyright Leo Feyer 2005-2013
  */
-class EventRegistrationModel extends \Model
+class EventRegistrationsModel extends \Model
 {
 
 	/**
 	 * Table name
 	 * @var string
 	 */
-	protected static $strTable = 'tl_event_registration';
+	protected static $strTable = 'tl_event_registrations';
 
 
     /**

@@ -17,7 +17,7 @@
  * @package    simple_event_registration 
  * @filesource
  */
-namespace FelixPfeiffer\SimpleEventRegitration;
+namespace FelixPfeiffer\SimpleEventRegistration;
 
 /**
  * Class ModuleSimpleEventRegistration
@@ -64,13 +64,11 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
 	{
 		parent::compile();
 
-
-
 		if(FE_USER_LOGGED_IN)
         {
 
-			// Get current event
-            $objEvent = \CalendarEventsModel::findPublishedByParentAndIdOrAlias($this->cal_calendar,$this->Input->get('events'));
+            // Get the current event
+            $objEvent = \CalendarEventsModel::findPublishedByParentAndIdOrAlias(\Input::get('events'), $this->cal_calendar);
 
             if($objEvent === null) return false;
 
@@ -132,8 +130,8 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
 		$objTemplate->listHeadline = $objEvent->ser_showheadline;
 		$objTemplate->listid = 'simple_event_registration_list_table';
 		$objTemplate->listsummary = sprintf($GLOBALS['TL_LANG']['MSC']['ser_listsummary'],html_entity_decode($objEvent->title));
-		
-		$objRegistrations = \FelixPfeiffer\SimpleEventRegitration\EventRegistrationModel::findByPid($objEvent->id);
+
+		$objRegistrations = \FelixPfeiffer\SimpleEventRegistration\EventRegistrationsModel::findByPid($objEvent->id);
 
 		if($objRegistrations === null)
 		{
@@ -242,7 +240,7 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
 		if($objEvent->ser_date < time())
 		{
 			$objTemplate->blnShowForm = false;
-			$arrMess['message'] = sprintf($GLOBALS['TL_LANG']['MSC']['ser_regclosed'],$this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'],$objEvent->ser_date));
+			$arrMess['message'] = sprintf($GLOBALS['TL_LANG']['MSC']['ser_regclosed'],\Date::parse($GLOBALS['TL_CONFIG']['dateFormat'],$objEvent->ser_date));
 			$arrMess['message_class'] = " closed";
 			$blnEnded = true;
 			$arrMessage[] = $arrMess;
@@ -394,11 +392,11 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
         $objMailText = \Database::getInstance()->prepare($strSql)->execute($objEvent->pid);
 
 		// Send notification
-		$objEmail = new Email();
+		$objEmail = new \Email();
 		$strFrom = $GLOBALS['TL_CONFIG']['adminEmail'];
 		$strNotify = $objEvent->ser_email != "" ? $objEvent->ser_email : $GLOBALS['TL_CONFIG']['adminEmail'];
 		
-		$span = Calendar::calculateSpan($objEvent->startTime, $objEvent->endTime);
+		$span = \Calendar::calculateSpan($objEvent->startTime, $objEvent->endTime);
 
 		// Get date
 		if ($span > 0)
@@ -571,7 +569,7 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
 	 * @param string
 	 * @return string
 	 */
-	protected function generateEventUrl(Database_Result $objEvent, $strUrl)
+	/*protected function generateEventUrl(Database_Result $objEvent, $strUrl)
 	{
 		// Link to default page
 		if ($objEvent->source == 'default' || !strlen($objEvent->source))
@@ -606,7 +604,7 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
 		}
 
 		return '';
-	}
+	}*/
 
 	
 }

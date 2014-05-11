@@ -41,11 +41,17 @@ $GLOBALS['BE_MOD']['content']['calendar']['serexportfields'] = array(
 $GLOBALS['BE_MOD']['content']['calendar']['stylesheet'] = 'system/modules/simple_event_registration/assets/be_css.css';
 
  
-$GLOBALS['FE_MOD']['events']['eventreader'] = 'Subcolumns\\ModuleSimpleEventRegistration';
-$GLOBALS['FE_MOD']['events']['serattendance'] = 'Subcolumns\\ModuleSimpleEventAttendance';
+$GLOBALS['FE_MOD']['events']['eventreader'] = 'SimpleEventRegistration\\ModuleSimpleEventRegistration';
+$GLOBALS['FE_MOD']['events']['serattendance'] = 'SimpleEventRegistration\\ModuleSimpleEventAttendance';
 
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('SimpleEventRegistration', 'showPlaces');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('SimpleEventRegistration', 'showClasses');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('SimpleEventRegistration', 'showLabel');
+
+
+/**
+ * Das Model für die Registrierungen registrieren
+ */
+$GLOBALS['TL_MODELS']['tl_event_registrations'] = 'FelixPfeiffer\SimpleEventRegistration\EventRegistrationsModel';
 
 ?>

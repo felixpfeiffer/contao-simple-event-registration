@@ -26,14 +26,14 @@ ClassLoader::addNamespaces(array
 ClassLoader::addClasses(array
 (
 	// Classes
-	'FelixPfeiffer\SimpleEventRegitration\SimpleEventRegistration'       => 'system/modules/simple_event_registration/classes/SimpleEventRegistration.php',
+	'FelixPfeiffer\SimpleEventRegistration\SimpleEventRegistration'       => 'system/modules/simple_event_registration/classes/SimpleEventRegistration.php',
 
 	// Models
-	'FelixPfeiffer\SimpleEventRegitration\EventRegistrationModel'        => 'system/modules/simple_event_registration/models/EventRegistrationModel.php',
+	'FelixPfeiffer\SimpleEventRegistration\EventRegistrationsModel'        => 'system/modules/simple_event_registration/models/EventRegistrationsModel.php',
 
 	// Modules
-	'FelixPfeiffer\SimpleEventRegitration\ModuleSimpleEventAttendance'   => 'system/modules/simple_event_registration/modules/ModuleSimpleEventAttendance.php',
-	'FelixPfeiffer\SimpleEventRegitration\ModuleSimpleEventRegistration' => 'system/modules/simple_event_registration/modules/ModuleSimpleEventRegistration.php',
+	'FelixPfeiffer\SimpleEventRegistration\ModuleSimpleEventAttendance'   => 'system/modules/simple_event_registration/modules/ModuleSimpleEventAttendance.php',
+	'FelixPfeiffer\SimpleEventRegistration\ModuleSimpleEventRegistration' => 'system/modules/simple_event_registration/modules/ModuleSimpleEventRegistration.php',
 ));
 
 
