@@ -1,0 +1,37 @@
+{
+	"name":"felixpfeiffer/Contao-Simple-Event-Registration",
+	"description":"A simple way to let contao memebers register for an event.",
+	"keywords":["event","registration","waitinglist"],
+	"type":"contao-module",
+	"homepage":"http://www.felixpfeiffer.com/",
+	"license":"LGPL-3.0+",
+	"authors":[
+		{
+			"name":"Felix Pfeiffer",
+			"homepage":"http://www.felixpfeiffer.com/",
+			"role":"Developer"
+		}
+	],
+	"support":{
+		"issues":"https://github.com/felixpfeiffer/Contao-Simple-Event-Registration/issues",
+		"source":"https://github.com/felixpfeiffer/Contao-Simple-Event-Registration"
+	},
+	"require":{
+		"php":">=5.3",
+		"contao/core":"~3.2",
+		"contao-community-alliance/composer-installer":"~2.0"
+	},
+	"autoload":{
+		"classmap":[""]
+	},
+	"replace":{
+		"contao-legacy/simple_event_registration":"*"
+	},
+	"extra":{
+		"contao":{
+			"sources":{
+				"":"system/modules/simple_event_registration"
+			}
+		}
+	}
+}
