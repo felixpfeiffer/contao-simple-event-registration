@@ -1,5 +1,5 @@
 {
-	"name":"felixpfeiffer/Contao-Simple-Event-Registration",
+	"name":"felixpfeiffer/contao-simple-event-registration",
 	"description":"A simple way to let contao memebers register for an event.",
 	"keywords":["event","registration","waitinglist"],
 	"type":"contao-module",
@@ -13,8 +13,8 @@
 		}
 	],
 	"support":{
-		"issues":"https://github.com/felixpfeiffer/Contao-Simple-Event-Registration/issues",
-		"source":"https://github.com/felixpfeiffer/Contao-Simple-Event-Registration"
+		"issues":"https://github.com/felixpfeiffer/contao-simple-event-registration/issues",
+		"source":"https://github.com/felixpfeiffer/contao-simple-event-registration"
 	},
 	"require":{
 		"php":">=5.3",
