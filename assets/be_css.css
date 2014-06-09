@@ -1,14 +1,15 @@
 .ser_overview {
-    margin-top: 0.5em;
+    margin-top: 2.25em;
+    margin-bottom: 1em;
     padding-top: 0.5em;
     border-top: 1px solid #cdcdcd;
 }
 .ser_overview table {
-    width: 99%;
+    width: 100%;
 }
 .ser_overview td {
-    text-align: center;
     width: 20%;
+    text-align: center;
     line-height: 2em;
     color: #666966;
 }

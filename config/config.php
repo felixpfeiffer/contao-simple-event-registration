@@ -19,7 +19,7 @@
  * Software Foundation website at http://www.gnu.org/licenses/.
  *
  * PHP version 5
- * @copyright  2010 Felix Pfeiffer : Neue Medien 
+ * @copyright  2010 - 2014 Felix Pfeiffer : Neue Medien
  * @author     Felix Pfeiffer 
  * @package    simple_event_registration 
  * @license    LGPL 
@@ -35,17 +35,23 @@ $GLOBALS['BE_MOD']['content']['calendar']['serexportfields'] = array(
 	'user' => array('firstname','lastname','email'),
 	'anuser' => array('firstname','lastname','email'),
 	'event'=> array('title','date','url'),
-    'stylesheet' => 'system/modules/simple_event_registration/html/be_css.css'
+    'stylesheet' => 'system/modules/simple_event_registration/assets/be_css.css'
 );
 
-$GLOBALS['BE_MOD']['content']['calendar']['stylesheet'] = 'system/modules/simple_event_registration/html/be_css.css';
+$GLOBALS['BE_MOD']['content']['calendar']['stylesheet'] = 'system/modules/simple_event_registration/assets/be_css.css';
 
  
-$GLOBALS['FE_MOD']['events']['eventreader'] = 'ModuleSimpleEventRegistration';
-$GLOBALS['FE_MOD']['events']['serattendance'] = 'ModuleSimpleEventAttendance';
+$GLOBALS['FE_MOD']['events']['eventreader'] = 'SimpleEventRegistration\\ModuleSimpleEventRegistration';
+$GLOBALS['FE_MOD']['events']['serattendance'] = 'SimpleEventRegistration\\ModuleSimpleEventAttendance';
 
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('SimpleEventRegistration', 'showPlaces');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('SimpleEventRegistration', 'showClasses');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('SimpleEventRegistration', 'showLabel');
+
+
+/**
+ * Das Model für die Registrierungen registrieren
+ */
+$GLOBALS['TL_MODELS']['tl_event_registrations'] = 'FelixPfeiffer\SimpleEventRegistration\EventRegistrationsModel';
 
 ?>

@@ -19,7 +19,7 @@
  * Software Foundation website at http://www.gnu.org/licenses/.
  *
  * PHP version 5
- * @copyright  2010 Felix Pfeiffer : Neue Medien 
+ * @copyright  2010 - 2014 Felix Pfeiffer : Neue Medien
  * @author     Felix Pfeiffer 
  * @package    Language
  * @license    LGPL 
@@ -54,8 +54,8 @@ $GLOBALS['TL_LANG']['MSC']['ser_regclosed'] = 'Die Anmeldefrist für dieses Even
 
 $GLOBALS['TL_LANG']['MSC']['quantity_label'] = "Wieviele Plätze möchten Sie reservieren?";
 
-$GLOBALS['TL_LANG']['MSC']['ser_registration_label'] = 'Buchungen';
-$GLOBALS['TL_LANG']['MSC']['ser_waitinglist_label'] = 'Warteliste';
+$GLOBALS['TL_LANG']['MSC']['ser_registration_label'] = 'Gebuchte Plätze';
+$GLOBALS['TL_LANG']['MSC']['ser_waitinglist_label'] = 'Plätze auf Warteliste';
 $GLOBALS['TL_LANG']['MSC']['ser_availability_label'] = 'Verfügbarkeit';
 $GLOBALS['TL_LANG']['MSC']['ser_availability_label'] = array('Verfügbarkeit','Freie Plätze','Warteliste');
 $GLOBALS['TL_LANG']['MSC']['ser_deadline_label'] =  array('Anmeldefrist','offen','geschlossen');
@@ -72,85 +72,66 @@ $GLOBALS['TL_LANG']['MSC']['ser_label_user']['booked'] = 'Sie sind bereits regis
 
 
 /* E-Mail Anmeldebenachrichtigung Administrator */
-$GLOBALS['TL_LANG']['MSC']['ser_register_subject'] = 'Kursanmeldung für Kurs: ##event_title##';
+$GLOBALS['TL_LANG']['MSC']['ser_register_subject'] = 'Anmeldung für Event: ##event_title##';
 
 $GLOBALS['TL_LANG']['MSC']['ser_notify_mail'] = '
-<h2>Kursanmeldung</h2>
-Für den ##event_title## (##event_date##) hat sich folgender User angemeldet.
+<h2>Eventanmeldung</h2>
+Für Das Event "##event_title##" (##event_date##) hat sich folgendes Mitglied angemeldet.
 <hr/>
-Kursteilnehmer:<br />
+Mitglied:<br />
 <b>##user_firstname## ##user_lastname##</b><br />
-Anzahl der gebuchten Plätze: ##ser_quantity##<br />
 <b>Username: ##user_username##</b><br />
 Adresse: {{user::street}}, {{user::postal}} {{user::city}}<br />
-Klinik: {{user::Klinik}}<br />
-Ordination: {{user::Ordination}}<br />
+Anzahl Plätze: ##user_
 <br />
 E-Mail: ##user_email##<br />
 Telefon: {{user::phone}}<br />
 <hr />
-<h2>Kursdaten</h2>
-Kurs: ##event_title##<br />
-Kursdatum: ##event_date##<br />
-Kurs-URL: ##event_url##<br />
-Kursnummer: ##event_kursnummer##<br />
-Gebühren: ##event_gebuehren##<br />
-<hr />
-In das Backend einloggen: http://www.craftandvalue.com/_clients/handkurse/contao/
+<h2>Event-Daten</h2>
+Event: ##event_title##<br />
+Datum: ##event_date##<br />
+URL: ##event_url##<br />
 ';
 
 /* E-Mail Anmeldebenachrichtigung (Warteliste) Administrator */
-$GLOBALS['TL_LANG']['MSC']['ser_waitinglist_subject'] = 'Wartelisteneintrag für Kurs: ##event_title##';
+$GLOBALS['TL_LANG']['MSC']['ser_waitinglist_subject'] = 'Wartelisteneintrag für Event: ##event_title##';
 
 $GLOBALS['TL_LANG']['MSC']['ser_waitinglist_mail'] = '
-<h2>Kursanmeldung (Warteliste)</h2>
-Für den ##event_title## (##event_date##) hat sich folgender User angemeldet.
+<h2>Eventanmeldung (Warteliste)</h2>
+Für das Event "##event_title##" (##event_date##) hat sich folgendes Mitglied angemeldet.
 <hr/>
-Kursteilnehmer:<br />
+Mitglied:<br />
 <b>##user_firstname## ##user_lastname##</b><br />
-Anzahl der gebuchten Plätze: ##ser_quantity##<br />
 <b>Username: ##user_username##</b><br />
 Adresse: {{user::street}}, {{user::postal}} {{user::city}}<br />
-Klinik: {{user::Klinik}}<br />
-Ordination: {{user::Ordination}}<br />
 <br />
 E-Mail: ##user_email##<br />
 Telefon: {{user::phone}}<br />
 <hr />
-<h2>Kursdaten</h2>
-Kurs: ##event_title##<br />
-Kursdatum: ##event_date##<br />
-Kurs-URL: ##event_url##<br />
-Kursnummer: ##event_kursnummer##<br />
-Gebühren: ##event_gebuehren##<br />
-<hr />
-In das Backend einloggen: http://www.craftandvalue.com/_clients/handkurse/contao/
+<h2>Event-Daten</h2>
+Event: ##event_title##<br />
+Datum: ##event_date##<br />
+URL: ##event_url##<br />
 ';
 
 /* E-Mail Abmeldebenachrichtigung Administrator */
-$GLOBALS['TL_LANG']['MSC']['ser_unregister_subject'] = 'Stornierung für Kurs: ##event_title##';
+$GLOBALS['TL_LANG']['MSC']['ser_unregister_subject'] = 'Stornierung für Event: ##event_title##';
 $GLOBALS['TL_LANG']['MSC']['ser_unregister_mail'] = '
-<h2>Stornierung Handkurs</h2>
-Für den ##event_title## (##event_date##) wurde ein Stornierung vorgenommen.
+<h2>Stornierung</h2>
+Für das Event "##event_title##" (##event_date##) wurde ein Stornierung vorgenommen.
 <hr/>
-Kursteilnehmer:<br />
+Mitglied:<br />
 <b>##user_firstname## ##user_lastname##</b><br />
 <b>Username: ##user_username##</b><br />
 Adresse: {{user::street}}, {{user::postal}} {{user::city}}<br />
-Klinik: {{user::Klinik}}<br />
-Ordination: {{user::Ordination}}<br />
 <br />
 E-Mail: ##user_email##<br />
 Telefon: {{user::phone}}<br />
 <hr />
-<h2>Kursdaten</h2>
-Kurs: ##event_title##<br />
-Kursdatum: ##event_date##<br />
-Kurs-URL: ##event_url##<br />
-Kursnummer: ##event_kursnummer##<br />
-Gebühren: ##event_gebuehren##<br />
-<hr />
-In das Backend einloggen: http://www.craftandvalue.com/_clients/handkurse/contao/
+<h2>Event-Daten</h2>
+Event: ##event_title##<br />
+Datum: ##event_date##<br />
+URL: ##event_url##<br />
 ';
 
 $GLOBALS['TL_LANG']['MSC']['ser_showevents']['all']       = 'Alle Events anzeigen';

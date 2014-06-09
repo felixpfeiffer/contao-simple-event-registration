@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
 
 /**
  * TYPOlight webCMS
@@ -12,22 +12,22 @@
  * visit the project website http://www.typolight.org.
  *
  * PHP version 5
- * @copyright  2010 Felix Pfeiffer : Neue Medien 
+ * @copyright  2010 - 2014 Felix Pfeiffer : Neue Medien
  * @author     Felix Pfeiffer 
  * @package    simple_event_registration 
  * @filesource
  */
-
+namespace FelixPfeiffer\SimpleEventRegistration;
 
 /**
  * Class ModuleSimpleEventRegistration
  *
  * Front end module "ModuleSimpleEventRegistration".
- * @copyright  2010 Felix Pfeiffer : Neue Medien 
+ * @copyright  2010 - 2014 Felix Pfeiffer : Neue Medien
  * @author     Felix Pfeiffer 
  * @package    simple_event_registration 
  */
-class ModuleSimpleEventRegistration extends ModuleEventReader
+class ModuleSimpleEventRegistration extends \ModuleEventReader
 {
 	/**
 	 * Variable zum Testen, ob die Anmeldung erwünscht ist oder nicht.
@@ -43,7 +43,7 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 	{
 		if (TL_MODE == 'BE')
 		{
-			$objTemplate = new BackendTemplate('be_wildcard');
+			$objTemplate = new \BackendTemplate('be_wildcard');
 
 			$objTemplate->wildcard = '### SIMPLE EVENT REGISTRATION READER ###';
 			$objTemplate->title = $this->headline;
@@ -53,7 +53,7 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 
 			return $objTemplate->parse();
 		}
-		
+
 		return parent::generate();
 	}
 	
@@ -63,19 +63,21 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 	protected function compile()
 	{
 		parent::compile();
-		
-		if(FE_USER_LOGGED_IN){
-			
-			// Get current event
-			$objEvent = $this->Database->prepare("SELECT * FROM tl_calendar_events WHERE pid IN(" . implode(',', $this->cal_calendar) . ") AND (id=? OR alias=?)")
-									   ->execute((is_numeric($this->Input->get('events')) ? $this->Input->get('events') : 0), $this->Input->get('events'));
-			
+
+		if(FE_USER_LOGGED_IN)
+        {
+
+            // Get the current event
+            $objEvent = \CalendarEventsModel::findPublishedByParentAndIdOrAlias(\Input::get('events'), $this->cal_calendar);
+
+            if($objEvent === null) return false;
+
 			// If current event isn't a registration event, don't go on
 			if(!$objEvent->ser_register) {
 				$this->blnParseRegistration = false;
 			}
 			
-			// If current event isn't a registration event, don't go on
+			// If registrations should not be shown
 			if(!$objEvent->ser_show) {
 				$this->blnShowList = false;
 			}
@@ -84,7 +86,6 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 			$this->import('FrontendUser', 'User');
 			$arrRegGroups = deserialize($objEvent->ser_groups);
 			$arrShowGroups = deserialize($objEvent->ser_showgroups);
-			
 			if(is_array($arrRegGroups) && count(array_intersect($this->User->groups, $arrRegGroups)) < 1)
 			{
 				$this->blnParseRegistration = false;
@@ -123,18 +124,17 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 	protected function parseList($objEvent)
 	{
 		
-		$objTemplate = new FrontendTemplate('simple_events_registration_list');
+		$objTemplate = new \FrontendTemplate('simple_events_registration_list');
 		$objTemplate->blnShowList = true;
 		
 		$objTemplate->listHeadline = $objEvent->ser_showheadline;
 		$objTemplate->listid = 'simple_event_registration_list_table';
 		$objTemplate->listsummary = sprintf($GLOBALS['TL_LANG']['MSC']['ser_listsummary'],html_entity_decode($objEvent->title));
-		
-		$objRegistrations = $this->Database->prepare("SELECT * FROM tl_event_registrations WHERE pid=? ORDER BY tstamp DESC")->execute($objEvent->id);
-		
-		if($objRegistrations->numRows < 1)
-		{
 
+		$objRegistrations = \FelixPfeiffer\SimpleEventRegistration\EventRegistrationsModel::findByPid($objEvent->id);
+
+		if($objRegistrations === null)
+		{
 			$objTemplate->blnShowList = false;
 			$objTemplate->listMessage = sprintf($GLOBALS['TL_LANG']['MSC']['ser_emptylist'],html_entity_decode($objEvent->title));
 		}
@@ -149,10 +149,10 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 				
 				if($objRegistrations->userId != 0)
 				{
+
+                    $objUser = \MemberModel::findByPk($objRegistrations->userId);
 					
-					$objUser = $this->Database->prepare("SELECT firstname, lastname, email FROM tl_member WHERE id=?")->limit(1)->execute($objRegistrations->userId);
-					
-					if($objUser->numRows > 0)
+					if($objUser !== null)
 					{
 					
 						$arrReg['firstname'] = $objUser->firstname;
@@ -231,7 +231,7 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 	protected function parseRegistration($objEvent)
 	{
 	
-		$objTemplate = new FrontendTemplate('simple_events_registration_form');
+		$objTemplate = new \FrontendTemplate('simple_events_registration_form');
 		$objTemplate->blnShowForm = true;
 		
 		$isregistered = false;
@@ -240,7 +240,7 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 		if($objEvent->ser_date < time())
 		{
 			$objTemplate->blnShowForm = false;
-			$arrMess['message'] = sprintf($GLOBALS['TL_LANG']['MSC']['ser_regclosed'],$this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'],$objEvent->ser_date));
+			$arrMess['message'] = sprintf($GLOBALS['TL_LANG']['MSC']['ser_regclosed'],\Date::parse($GLOBALS['TL_CONFIG']['dateFormat'],$objEvent->ser_date));
 			$arrMess['message_class'] = " closed";
 			$blnEnded = true;
 			$arrMessage[] = $arrMess;
@@ -296,7 +296,7 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 			$objTemplate->places_class = "";
 		}
 		
-		$objTemplate->ser_quantity = $this->ser_quantity;
+		$objTemplate->ser_quantity = $objEvent->ser_maxplaces > 0;
 		$objTemplate->quantity_label = $GLOBALS['TL_LANG']['MSC']['quantity_label'];
 		
 		
@@ -349,7 +349,7 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 	protected function checkPlaces($id, $intPlaces)
 	{
 		
-		$objPlaces = $this->Database->execute("SELECT SUM(quantity) AS reg_places FROM tl_event_registrations WHERE pid=".$id);
+		$objPlaces = \Database::getInstance()->execute("SELECT SUM(quantity) AS reg_places FROM tl_event_registrations WHERE pid=".$id);
 			
 		if($objPlaces->reg_places<$intPlaces) return $intPlaces - $objPlaces->reg_places;
 		else return false;
@@ -359,7 +359,7 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 	protected function checkRegistration($userId, $intEventId)
 	{
 		
-		$objPlaces = $this->Database->prepare("SELECT * FROM tl_event_registrations WHERE userId=? AND pid=?")->execute($userId, $intEventId);
+		$objPlaces = \Database::getInstance()->prepare("SELECT * FROM tl_event_registrations WHERE userId=? AND pid=?")->execute($userId, $intEventId);
 					   
 		if($objPlaces->numRows>0) return true;
 		else return false;
@@ -384,39 +384,39 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 		{
 			$arrSet['quantity'] = $intQuantity;
 		}
-		
-		$this->Database->prepare("INSERT INTO tl_event_registrations %s")->set($arrSet)->execute();
+
+        \Database::getInstance()->prepare("INSERT INTO tl_event_registrations %s")->set($arrSet)->execute();
 
         $strSql = $intPlaces ? "SELECT ser_confirm_subject AS subject, ser_confirm_text AS text, ser_confirm_html AS html FROM tl_calendar WHERE id=?" : "SELECT ser_wait_subject AS subject, ser_wait_text AS text, ser_wait_html AS html FROM tl_calendar WHERE id=?";
 
-        $objMailText = $this->Database->prepare($strSql)->execute($objEvent->pid);
+        $objMailText = \Database::getInstance()->prepare($strSql)->execute($objEvent->pid);
 
 		// Send notification
-		$objEmail = new Email();
+		$objEmail = new \Email();
 		$strFrom = $GLOBALS['TL_CONFIG']['adminEmail'];
 		$strNotify = $objEvent->ser_email != "" ? $objEvent->ser_email : $GLOBALS['TL_CONFIG']['adminEmail'];
 		
-		$span = Calendar::calculateSpan($objEvent->startTime, $objEvent->endTime);
+		$span = \Calendar::calculateSpan($objEvent->startTime, $objEvent->endTime);
 
 		// Get date
 		if ($span > 0)
 		{
-			$objEvent->date = $this->parseDate($GLOBALS['TL_CONFIG'][($objEvent->addTime ? 'datimFormat' : 'dateFormat')], $objEvent->startTime) . ' - ' . $this->parseDate($GLOBALS['TL_CONFIG'][($objEvent->addTime ? 'datimFormat' : 'dateFormat')], $objEvent->endTime);
+			$objEvent->date = \Date::parse($GLOBALS['TL_CONFIG'][($objEvent->addTime ? 'datimFormat' : 'dateFormat')], $objEvent->startTime) . ' - ' . \Date::parse($GLOBALS['TL_CONFIG'][($objEvent->addTime ? 'datimFormat' : 'dateFormat')], $objEvent->endTime);
 		}
 		elseif ($objEvent->startTime == $objEvent->endTime)
 		{
-			$objEvent->date = $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $objEvent->startTime) . ($objEvent->addTime ? ' (' . $this->parseDate($GLOBALS['TL_CONFIG']['timeFormat'], $objEvent->startTime) . ')' : '');
+			$objEvent->date = \Date::parse($GLOBALS['TL_CONFIG']['dateFormat'], $objEvent->startTime) . ($objEvent->addTime ? ' (' . \Date::parse($GLOBALS['TL_CONFIG']['timeFormat'], $objEvent->startTime) . ')' : '');
 		}
 		else
 		{
-			$objEvent->date = $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $objEvent->startTime) . ($objEvent->addTime ? ' (' . $this->parseDate($GLOBALS['TL_CONFIG']['timeFormat'], $objEvent->startTime) . ' - ' . $this->parseDate($GLOBALS['TL_CONFIG']['timeFormat'], $objEvent->endTime) . ')' : '');
+			$objEvent->date = \Date::parse($GLOBALS['TL_CONFIG']['dateFormat'], $objEvent->startTime) . ($objEvent->addTime ? ' (' . \Date::parse($GLOBALS['TL_CONFIG']['timeFormat'], $objEvent->startTime) . ' - ' . \Date::parse($GLOBALS['TL_CONFIG']['timeFormat'], $objEvent->endTime) . ')' : '');
 		}
 
         $notifyText = $intPlaces ? $GLOBALS['TL_LANG']['MSC']['ser_notify_mail'] : $GLOBALS['TL_LANG']['MSC']['ser_waitinglist_mail'];
         $notifySubject = $intPlaces ? $GLOBALS['TL_LANG']['MSC']['ser_register_subject'] : $GLOBALS['TL_LANG']['MSC']['ser_waitinglist_subject'];
 
-		$messageText = $this->replaceInserts($objEvent,$objMailText->text,$intQuantity);
-		$messageHTML = $this->replaceInserts($objEvent,$objMailText->html,$intQuantity);
+		$messageText = $this->replaceInserts($objEvent,html_entity_decode($objMailText->text),$intQuantity);
+		$messageHTML = $this->replaceInserts($objEvent,html_entity_decode($objMailText->html),$intQuantity);
 		$notifyText = $this->replaceInserts($objEvent,$notifyText,$intQuantity);
 		
 		$objEmail->from = $strFrom;
@@ -439,36 +439,36 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 	protected function unregisterUser($objEvent)
 	{
 		
-		$this->Database->prepare("DELETE FROM tl_event_registrations WHERE pid=? AND userId=?")->execute($objEvent->id,$this->User->id);
+		\Database::getInstance()->prepare("DELETE FROM tl_event_registrations WHERE pid=? AND userId=?")->execute($objEvent->id,$this->User->id);
 
-        $objMailerText = $this->Database->prepare("SELECT ser_cancel_subject AS subject, ser_cancel_text AS text, ser_cancel_html AS html FROM tl_calendar WHERE id=?")->execute($objEvent->pid);
+        $objMailerText = \Database::getInstance()->prepare("SELECT ser_cancel_subject AS subject, ser_cancel_text AS text, ser_cancel_html AS html FROM tl_calendar WHERE id=?")->execute($objEvent->pid);
 
 		// Send notification
-		$objEmail = new Email();
+		$objEmail = new \Email();
 		$strFrom = $GLOBALS['TL_CONFIG']['adminEmail'];
 		$strNotify = $objEvent->ser_email != "" ? $objEvent->ser_email : $GLOBALS['TL_CONFIG']['adminEmail'];
 		
-		$span = Calendar::calculateSpan($objEvent->startTime, $objEvent->endTime);
+		$span = \Calendar::calculateSpan($objEvent->startTime, $objEvent->endTime);
 
 		// Get date
 		if ($span > 0)
 		{
-			$objEvent->date = $this->parseDate($GLOBALS['TL_CONFIG'][($objEvent->addTime ? 'datimFormat' : 'dateFormat')], $objEvent->startTime) . ' - ' . $this->parseDate($GLOBALS['TL_CONFIG'][($objEvent->addTime ? 'datimFormat' : 'dateFormat')], $objEvent->endTime);
+			$objEvent->date = \Date::parse($GLOBALS['TL_CONFIG'][($objEvent->addTime ? 'datimFormat' : 'dateFormat')], $objEvent->startTime) . ' - ' . \Date::parse($GLOBALS['TL_CONFIG'][($objEvent->addTime ? 'datimFormat' : 'dateFormat')], $objEvent->endTime);
 		}
 		elseif ($objEvent->startTime == $objEvent->endTime)
 		{
-			$objEvent->date = $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $objEvent->startTime) . ($objEvent->addTime ? ' (' . $this->parseDate($GLOBALS['TL_CONFIG']['timeFormat'], $objEvent->startTime) . ')' : '');
+			$objEvent->date = \Date::parse($GLOBALS['TL_CONFIG']['dateFormat'], $objEvent->startTime) . ($objEvent->addTime ? ' (' . \Date::parse($GLOBALS['TL_CONFIG']['timeFormat'], $objEvent->startTime) . ')' : '');
 		}
 		else
 		{
-			$objEvent->date = $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $objEvent->startTime) . ($objEvent->addTime ? ' (' . $this->parseDate($GLOBALS['TL_CONFIG']['timeFormat'], $objEvent->startTime) . ' - ' . $this->parseDate($GLOBALS['TL_CONFIG']['timeFormat'], $objEvent->endTime) . ')' : '');
+			$objEvent->date = \Date::parse($GLOBALS['TL_CONFIG']['dateFormat'], $objEvent->startTime) . ($objEvent->addTime ? ' (' . \Date::parse($GLOBALS['TL_CONFIG']['timeFormat'], $objEvent->startTime) . ' - ' . \Date::parse($GLOBALS['TL_CONFIG']['timeFormat'], $objEvent->endTime) . ')' : '');
 		}
 
 		$notifyText = $this->replaceInserts($objEvent,$GLOBALS['TL_LANG']['MSC']['ser_unregister_mail']);
 		$notifySubject = $GLOBALS['TL_LANG']['MSC']['ser_unregister_subject'];
 
-        $messageText = $this->replaceInserts($objEvent,$objMailerText->text);
-        $messageHTML = $this->replaceInserts($objEvent,$objMailerText->html);
+        $messageText = $this->replaceInserts($objEvent,html_entity_decode($objMailerText->text));
+        $messageHTML = $this->replaceInserts($objEvent,html_entity_decode($objMailerText->html));
 		
 		$objEmail->from = $strFrom;
 		$objEmail->subject = $this->replaceInserts($objEvent,html_entity_decode($objMailerText->subject));
@@ -518,95 +518,12 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
         {
             $arrData['ser_quantity'] = $intQuantity;
         }
-        
-        
-        ##event_kursnummer##
 
-       #print_r($arrData);
-
-        $text = $this->parseSimpleTokens($text, $arrData);
+        $text = \String::parseSimpleTokens($text, $arrData);
 
         $text = $this->replaceInsertTags($text);
-		
-		/*$tags = array();
-		preg_match_all('/{{[^{}]+}}/i', $text, $tags);
-		
-		foreach ($tags[0] as $tag)
-	 	{
-			$elements = explode('::', str_replace(array('{{', '}}'), array('', ''), $tag));
-			$strValue = '';
-			switch (strtolower($elements[0]))
-			{
-				// Form
-				case 'user':
-					$strValue = $this->User->$elements[1];
-					break;
-				case 'event':
-					if($elements[1] == 'url')
-					{
-						$strUrl = $this->generateFrontendUrl(array('id'=>$objPage->id,'alias'=>$objPage->alias), '/events/%s');
-						$strValue = $this->generateEventUrl($objEvent, $strUrl);
-					}
-					else
-					{
-						$strValue = $objEvent->$elements[1];
-					}
-					break;
-				default:
-					$strValue = '';
-					break;
-			}
-			
-			$text = str_replace($tag, $strValue, $text);
-		}*/
-		
+
 		return $text;
 	}
 	
-	/**
-	 * Generate a URL and return it as string
-	 * @param object
-	 * @param string
-	 * @return string
-	 */
-	protected function generateEventUrl(Database_Result $objEvent, $strUrl)
-	{
-		// Link to default page
-		if ($objEvent->source == 'default' || !strlen($objEvent->source))
-		{
-			return $this->Environment->base . ampersand(sprintf($strUrl, ((!$GLOBALS['TL_CONFIG']['disableAlias'] && strlen($objEvent->alias)) ? $objEvent->alias : $objEvent->id)));
-		}
-
-		// Link to external page
-		if ($objEvent->source == 'external')
-		{
-			$this->import('String');
-
-			if (substr($objEvent->url, 0, 7) == 'mailto:')
-			{
-				$objEvent->url = 'mailto:' . $this->String->encodeEmail(substr($objEvent->url, 7));
-			}
-
-			return ampersand($objEvent->url);
-		}
-
-		// Fallback to current URL
-		$strUrl = ampersand($this->Environment->request, true);
-
-		// Get internal page
-		$objPage = $this->Database->prepare("SELECT id, alias FROM tl_page WHERE id=?")
-							 	  ->limit(1)
-								  ->execute($objEvent->jumpTo);
-
-		if ($objPage->numRows)
-		{
-			return ampersand($this->generateFrontendUrl($objPage->fetchAssoc()));
-		}
-
-		return '';
-	}
-
-	
 }
-
-?>

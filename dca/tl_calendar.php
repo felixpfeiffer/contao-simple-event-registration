@@ -41,61 +41,70 @@ $GLOBALS['TL_DCA']['tl_calendar']['fields']['ser_confirm_subject']  = array(
     'label'     => &$GLOBALS['TL_LANG']['tl_calendar']['ser_confirm_subject'],
     'exculde'   => true,
     'inputType' => 'text',
-    'eval'      => array('decodeEntities'=>false,'tl_class'=>'long')
+    'eval'      => array('decodeEntities'=>false,'tl_class'=>'long'),
+    'sql'                     => "varchar(164) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar']['fields']['ser_confirm_text']  = array(
     'label'     => &$GLOBALS['TL_LANG']['tl_calendar']['ser_confirm_text'],
     'exculde'   => true,
     'inputType' => 'textarea',
-    'eval'      => array('style'=>'height:140px;')
+    'eval'      => array('style'=>'height:140px;'),
+    'sql'                     => "text NULL"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar']['fields']['ser_confirm_html']  = array(
     'label'     => &$GLOBALS['TL_LANG']['tl_calendar']['ser_confirm_html'],
     'exculde'   => true,
     'inputType' => 'textarea',
-    'eval'      => array('rte'=>'tinyMCE','tl_class'=>'')
+    'eval'      => array('rte'=>'tinyMCE','tl_class'=>''),
+    'sql'                     => "text NULL"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar']['fields']['ser_cancel_subject']  = array(
     'label'     => &$GLOBALS['TL_LANG']['tl_calendar']['ser_cancel_subject'],
     'exculde'   => true,
     'inputType' => 'text',
-    'eval'      => array('decodeEntities'=>false,'tl_class'=>'long')
+    'eval'      => array('decodeEntities'=>false,'tl_class'=>'long'),
+    'sql'                     => "varchar(164) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar']['fields']['ser_cancel_text']  = array(
     'label'     => &$GLOBALS['TL_LANG']['tl_calendar']['ser_cancel_text'],
     'exculde'   => true,
     'inputType' => 'textarea',
-    'eval'      => array('style'=>'height:140px;')
+    'eval'      => array('style'=>'height:140px;'),
+    'sql'                     => "text NULL"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar']['fields']['ser_cancel_html']  = array(
     'label'     => &$GLOBALS['TL_LANG']['tl_calendar']['ser_cancel_html'],
     'exculde'   => true,
     'inputType' => 'textarea',
-    'eval'      => array('rte'=>'tinyMCE','tl_class'=>'')
+    'eval'      => array('rte'=>'tinyMCE','tl_class'=>''),
+    'sql'                     => "text NULL"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar']['fields']['ser_wait_subject']  = array(
     'label'     => &$GLOBALS['TL_LANG']['tl_calendar']['ser_wait_subject'],
     'exculde'   => true,
     'inputType' => 'text',
-    'eval'      => array('decodeEntities'=>false,'tl_class'=>'long')
+    'eval'      => array('decodeEntities'=>false,'tl_class'=>'long'),
+    'sql'                     => "varchar(164) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar']['fields']['ser_wait_text']  = array(
     'label'     => &$GLOBALS['TL_LANG']['tl_calendar']['ser_wait_text'],
     'exculde'   => true,
     'inputType' => 'textarea',
-    'eval'      => array('style'=>'height:140px;')
+    'eval'      => array('style'=>'height:140px;'),
+    'sql'                     => "text NULL"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar']['fields']['ser_wait_html']  = array(
     'label'     => &$GLOBALS['TL_LANG']['tl_calendar']['ser_wait_html'],
     'exculde'   => true,
     'inputType' => 'textarea',
-    'eval'      => array('rte'=>'tinyMCE','tl_class'=>'')
+    'eval'      => array('rte'=>'tinyMCE','tl_class'=>''),
+    'sql'                     => "text NULL"
 );
