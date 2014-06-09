@@ -350,9 +350,7 @@ class tl_simple_event_registration extends tl_calendar_events
 
         $strReturn = str_replace(array(' h52'),'',$strReturn);
 
-        $strReturn = substr($strReturn,0,-7);
-
-        $strReturn .= $objTemplate->parse() . '</div>' . "\n";
+        $strReturn .= $objTemplate->parse();
 
 
 

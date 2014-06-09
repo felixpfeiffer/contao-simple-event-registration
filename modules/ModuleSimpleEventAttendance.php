@@ -12,7 +12,7 @@
  * visit the project website http://www.typolight.org.
  *
  * PHP version 5
- * @copyright  2010 Felix Pfeiffer : Neue Medien 
+ * @copyright  2010 - 2014 Felix Pfeiffer : Neue Medien
  * @author     Felix Pfeiffer 
  * @package    simple_event_registration 
  * @filesource
@@ -23,7 +23,7 @@ namespace FelixPfeiffer\SimpleEventRegitration;
  * Class ModuleSimpleEventAttendance
  *
  * Front end module "ModuleSimpleEventAttendance".
- * @copyright  2010 Felix Pfeiffer : Neue Medien 
+ * @copyright  2010 - 2014 Felix Pfeiffer : Neue Medien
  * @author     Felix Pfeiffer 
  * @package    simple_event_registration 
  */

@@ -2,11 +2,11 @@
 <table>
 
     <tr>
-        <td class="ser_label"><?php echo $this->ser_places_label; ?></td>
-        <td class="ser_label"><?php echo $this->ser_registration_label; ?></td>
-        <td class="ser_label"><?php echo $this->ser_waitinglist_label; ?></td>
-        <td class="ser_label"><?php echo $this->ser_availability_label; ?></td>
-        <td class="ser_label"><?php echo $this->ser_deadline_label; ?></td>
+        <td class="ser_label ser_max"><?php echo $this->ser_places_label; ?></td>
+        <td class="ser_label ser_reg"><?php echo $this->ser_registration_label; ?></td>
+        <td class="ser_label ser_wait"><?php echo $this->ser_waitinglist_label; ?></td>
+        <td class="ser_label ser_availability"><?php echo $this->ser_availability_label; ?></td>
+        <td class="ser_label ser_deadline"><?php echo $this->ser_deadline_label; ?></td>
     </tr>
     <tr>
         <td class="ser_value"><?php echo $this->ser_places; ?></td>

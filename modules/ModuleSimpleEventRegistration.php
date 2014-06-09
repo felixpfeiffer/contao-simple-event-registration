@@ -12,7 +12,7 @@
  * visit the project website http://www.typolight.org.
  *
  * PHP version 5
- * @copyright  2010 Felix Pfeiffer : Neue Medien 
+ * @copyright  2010 - 2014 Felix Pfeiffer : Neue Medien
  * @author     Felix Pfeiffer 
  * @package    simple_event_registration 
  * @filesource
@@ -23,7 +23,7 @@ namespace FelixPfeiffer\SimpleEventRegistration;
  * Class ModuleSimpleEventRegistration
  *
  * Front end module "ModuleSimpleEventRegistration".
- * @copyright  2010 Felix Pfeiffer : Neue Medien 
+ * @copyright  2010 - 2014 Felix Pfeiffer : Neue Medien
  * @author     Felix Pfeiffer 
  * @package    simple_event_registration 
  */
@@ -150,7 +150,7 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
 				if($objRegistrations->userId != 0)
 				{
 
-                    $objUser = \MemberModel::findByPk($objRegistrations->id);
+                    $objUser = \MemberModel::findByPk($objRegistrations->userId);
 					
 					if($objUser !== null)
 					{
@@ -296,7 +296,7 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
 			$objTemplate->places_class = "";
 		}
 		
-		$objTemplate->ser_quantity = $this->ser_quantity;
+		$objTemplate->ser_quantity = $objEvent->ser_maxplaces > 0;
 		$objTemplate->quantity_label = $GLOBALS['TL_LANG']['MSC']['quantity_label'];
 		
 		
@@ -415,8 +415,8 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
         $notifyText = $intPlaces ? $GLOBALS['TL_LANG']['MSC']['ser_notify_mail'] : $GLOBALS['TL_LANG']['MSC']['ser_waitinglist_mail'];
         $notifySubject = $intPlaces ? $GLOBALS['TL_LANG']['MSC']['ser_register_subject'] : $GLOBALS['TL_LANG']['MSC']['ser_waitinglist_subject'];
 
-		$messageText = $this->replaceInserts($objEvent,$objMailText->text,$intQuantity);
-		$messageHTML = $this->replaceInserts($objEvent,$objMailText->html,$intQuantity);
+		$messageText = $this->replaceInserts($objEvent,html_entity_decode($objMailText->text),$intQuantity);
+		$messageHTML = $this->replaceInserts($objEvent,html_entity_decode($objMailText->html),$intQuantity);
 		$notifyText = $this->replaceInserts($objEvent,$notifyText,$intQuantity);
 		
 		$objEmail->from = $strFrom;
@@ -467,8 +467,8 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
 		$notifyText = $this->replaceInserts($objEvent,$GLOBALS['TL_LANG']['MSC']['ser_unregister_mail']);
 		$notifySubject = $GLOBALS['TL_LANG']['MSC']['ser_unregister_subject'];
 
-        $messageText = $this->replaceInserts($objEvent,$objMailerText->text);
-        $messageHTML = $this->replaceInserts($objEvent,$objMailerText->html);
+        $messageText = $this->replaceInserts($objEvent,html_entity_decode($objMailerText->text));
+        $messageHTML = $this->replaceInserts($objEvent,html_entity_decode($objMailerText->html));
 		
 		$objEmail->from = $strFrom;
 		$objEmail->subject = $this->replaceInserts($objEvent,html_entity_decode($objMailerText->subject));
@@ -518,48 +518,11 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
         {
             $arrData['ser_quantity'] = $intQuantity;
         }
-        
-        
-        ##event_kursnummer##
-
-       #print_r($arrData);
 
         $text = \String::parseSimpleTokens($text, $arrData);
 
         $text = $this->replaceInsertTags($text);
-		
-		/*$tags = array();
-		preg_match_all('/{{[^{}]+}}/i', $text, $tags);
-		
-		foreach ($tags[0] as $tag)
-	 	{
-			$elements = explode('::', str_replace(array('{{', '}}'), array('', ''), $tag));
-			$strValue = '';
-			switch (strtolower($elements[0]))
-			{
-				// Form
-				case 'user':
-					$strValue = $this->User->$elements[1];
-					break;
-				case 'event':
-					if($elements[1] == 'url')
-					{
-						$strUrl = $this->generateFrontendUrl(array('id'=>$objPage->id,'alias'=>$objPage->alias), '/events/%s');
-						$strValue = $this->generateEventUrl($objEvent, $strUrl);
-					}
-					else
-					{
-						$strValue = $objEvent->$elements[1];
-					}
-					break;
-				default:
-					$strValue = '';
-					break;
-			}
-			
-			$text = str_replace($tag, $strValue, $text);
-		}*/
-		
+
 		return $text;
 	}
 	
