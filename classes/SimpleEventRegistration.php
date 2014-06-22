@@ -17,7 +17,7 @@
  * @package    simple_event_registration 
  * @filesource
  */
-namespace FelixPfeiffer\SimpleEventRegitration;
+namespace FelixPfeiffer\SimpleEventRegistration;
 
 /**
  * Class SimpleEventRegistration
@@ -28,7 +28,7 @@ namespace FelixPfeiffer\SimpleEventRegitration;
  * @package    simple_event_registration 
  */
  
-class SimpleEventRegistration extends Frontend {
+class SimpleEventRegistration extends \Frontend {
 
     /**
      * Inserttag to show "(10 places left from 20)"
@@ -41,12 +41,12 @@ class SimpleEventRegistration extends Frontend {
 		$elements = explode('::', $strTag);
 		if($elements[0] != "ser" || !$elements[1]) return false;
 		
-		$objEvent = $this->Database->prepare("SELECT ser_register, ser_places FROM tl_calendar_events WHERE id=?")
+		$objEvent = \Database::getInstance()->prepare("SELECT ser_register, ser_places FROM tl_calendar_events WHERE id=?")
 									->execute($elements[1]);
 		
 		if($objEvent->ser_register != 1) return false;
 		
-		$objPlaces = $this->Database->prepare("SELECT SUM(quantity) AS reg_places FROM tl_event_registrations WHERE pid=? AND waitinglist=0")
+		$objPlaces = \Database::getInstance()->prepare("SELECT SUM(quantity) AS reg_places FROM tl_event_registrations WHERE pid=? AND waitinglist=0")
 									->execute($elements[1]);
 
 
@@ -74,7 +74,7 @@ class SimpleEventRegistration extends Frontend {
 		$elements = explode('::', $strTag);
 		if($elements[0] != "serclass" || !$elements[1]) return false;
 									
-		$objEvent = $this->Database->prepare("SELECT ser_register, ser_places, ser_date FROM tl_calendar_events WHERE id=?")
+		$objEvent = \Database::getInstance()->prepare("SELECT ser_register, ser_places, ser_date FROM tl_calendar_events WHERE id=?")
 									->execute($elements[1]);
 		
 		if($objEvent->ser_register != 1) return false;
@@ -84,7 +84,7 @@ class SimpleEventRegistration extends Frontend {
         if($objEvent->ser_date < time()) $arrClasses[] = 'finished';
         else $arrClasses[] = 'open';
 		
-		$objPlaces = $this->Database->prepare("SELECT SUM(quantity) AS reg_places FROM tl_event_registrations WHERE pid=? AND waitinglist!=1")
+		$objPlaces = \Database::getInstance()->prepare("SELECT SUM(quantity) AS reg_places FROM tl_event_registrations WHERE pid=? AND waitinglist!=1")
 									->execute($elements[1]);
 		
 
@@ -97,7 +97,7 @@ class SimpleEventRegistration extends Frontend {
 			// Get the front end user object
 			$this->import('FrontendUser', 'User');
 			
-			$objUserPlaces = $this->Database->prepare("SELECT SUM(quantity) AS reg_places FROM tl_event_registrations WHERE pid=? AND userId=?")
+			$objUserPlaces = \Database::getInstance()->prepare("SELECT SUM(quantity) AS reg_places FROM tl_event_registrations WHERE pid=? AND userId=?")
 									->execute($elements[1],$this->User->id);
 			
 			if($objUserPlaces->reg_places > 0) $arrClasses[] = 'booked';
@@ -126,7 +126,7 @@ class SimpleEventRegistration extends Frontend {
         if($elements[0] != "serlabel" || (!$elements[1]) && !$elements[2]) return false;
 
 
-        $objEvent = $this->Database->prepare("SELECT ser_register, ser_places, ser_date FROM tl_calendar_events WHERE id=?")
+        $objEvent = \Database::getInstance()->prepare("SELECT ser_register, ser_places, ser_date FROM tl_calendar_events WHERE id=?")
             ->execute($elements[1]);
 
         if($objEvent->ser_register != 1) return false;
@@ -148,7 +148,7 @@ class SimpleEventRegistration extends Frontend {
                 break;
             case 'availability':
                 if($blnClosed) return '';
-                $objPlaces = $this->Database->prepare("SELECT SUM(quantity) AS reg_places FROM tl_event_registrations WHERE pid=? AND waitinglist!=1")
+                $objPlaces = \Database::getInstance()->prepare("SELECT SUM(quantity) AS reg_places FROM tl_event_registrations WHERE pid=? AND waitinglist!=1")
                     ->execute($elements[1]);
                 $intPlaces = $objEvent->ser_places - $objPlaces->reg_places;
                 if( $intPlaces > 0)
@@ -167,7 +167,7 @@ class SimpleEventRegistration extends Frontend {
                     // Get the front end user object
                     $this->import('FrontendUser', 'User');
 
-                    $objUserPlaces = $this->Database->prepare("SELECT SUM(quantity) AS reg_places FROM tl_event_registrations WHERE pid=? AND userId=?")
+                    $objUserPlaces = \Database::getInstance()->prepare("SELECT SUM(quantity) AS reg_places FROM tl_event_registrations WHERE pid=? AND userId=?")
                         ->execute($elements[1],$this->User->id);
 
                     if($objUserPlaces->reg_places > 0)

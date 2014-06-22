@@ -44,9 +44,9 @@ $GLOBALS['BE_MOD']['content']['calendar']['stylesheet'] = 'system/modules/simple
 $GLOBALS['FE_MOD']['events']['eventreader'] = 'SimpleEventRegistration\\ModuleSimpleEventRegistration';
 $GLOBALS['FE_MOD']['events']['serattendance'] = 'SimpleEventRegistration\\ModuleSimpleEventAttendance';
 
-$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('SimpleEventRegistration', 'showPlaces');
-$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('SimpleEventRegistration', 'showClasses');
-$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('SimpleEventRegistration', 'showLabel');
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('SimpleEventRegistration\\SimpleEventRegistration', 'showPlaces');
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('SimpleEventRegistration\\SimpleEventRegistration', 'showClasses');
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('SimpleEventRegistration\\SimpleEventRegistration', 'showLabel');
 
 
 /**
