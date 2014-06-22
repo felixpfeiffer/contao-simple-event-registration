@@ -101,7 +101,9 @@ class ModuleSimpleEventAttendance extends \Events
 	 */
 	protected function compile()
 	{
-		$this->import('String');
+		global $objPage;
+
+        $this->import('String');
 		$this->import('Date');
 		
 		$this->strUrl = '';
@@ -109,11 +111,11 @@ class ModuleSimpleEventAttendance extends \Events
 		if($this->jumpTo != '')
 		{
 			// Get "jumpTo" page
-            $objPage = \PageModel::findByPk($this->jumpTo);
+            $objJTPage = \PageModel::findByPk($this->jumpTo);
 
-			if ($objPage)
+			if ($objJTPage)
 			{
-				$this->strUrl = $this->generateFrontendUrl($objPage->row(), '/events/%s');
+				$this->strUrl = $this->generateFrontendUrl($objJTPage->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/%s' : '/events/%s'));
 			}
 
 		}
@@ -148,11 +150,11 @@ class ModuleSimpleEventAttendance extends \Events
 				if($objAttendance->calJumpTo)
 				{
 					// Get "jumpTo" page
-                    $objPage = \PageModel::findByPk($objAttendance->calJumpTo);
+                    $objJTPage = \PageModel::findByPk($objAttendance->calJumpTo);
 
-					if ($objPage)
+					if ($objJTPage)
 					{
-						$strUrl = $this->generateFrontendUrl($objPage->row(), '/events/%s');
+						$strUrl = $this->generateFrontendUrl($objJTPage->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/%s' : '/events/%s'));
 					}
 				}
 				
@@ -179,7 +181,7 @@ class ModuleSimpleEventAttendance extends \Events
 					{
 						if(in_array($event['id'],$arrEventIds)) continue;
 						$event['firstDay'] = $GLOBALS['TL_LANG']['DAYS'][date('w', $day)];
-						$event['firstDate'] = $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $day);
+						$event['firstDate'] = \Date::parse($objPage->dateFormat, $day);
 						$arrEventIds[] = $event['id'];
 						$arrEvents[] = $event;
 					}
@@ -199,7 +201,6 @@ class ModuleSimpleEventAttendance extends \Events
                 // Do not index or cache the page if the page number is outside the range
                 if ($page < 1 || $page > max(ceil($total/$this->perPage), 1))
                 {
-                    global $objPage;
                     $objPage->noSearch = 1;
                     $objPage->cache = 0;
 
