@@ -243,7 +243,7 @@ class tl_event_registrations extends Backend
 			{
 				$strName = ( $arrRow['firstname'] != '' ? $arrRow['firstname'] . ' ' : '' ) . $arrRow['lastname'];
 			}
-			return '<p style="">' . $arrRow['quantity'] . ' - ' .$strName.', ' . $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'],$arrRow['tstamp']) . '</p> '."\n";
+			return '<p style="">' . $arrRow['quantity'] . ' - ' .$strName.', ' . \Date::parse($GLOBALS['TL_CONFIG']['datimFormat'],$arrRow['tstamp']) . '</p> '."\n";
 		}
 		
 		$objUser = $this->Database->prepare("SELECT * FROM tl_member WHERE ID=?")->execute($arrRow['userId']);
@@ -255,7 +255,7 @@ class tl_event_registrations extends Backend
         }
 		
 		return '
-<p class="'.$strClass.'">' . $arrRow['quantity'] . ' - ' . $objUser->firstname . ' ' . $objUser->lastname . ', <a href="contao/main.php?do=member&act=edit&id='.$objUser->id.'">' . $objUser->username . '</a>, ' . $this->parseDate($GLOBALS['TL_CONFIG']['datimFormat'],$arrRow['tstamp']) . '</p>' . "\n";
+<p class="'.$strClass.'">' . $arrRow['quantity'] . ' - ' . $objUser->firstname . ' ' . $objUser->lastname . ', <a href="contao/main.php?do=member&act=edit&id='.$objUser->id.'">' . $objUser->username . '</a>, ' . \Date::parse($GLOBALS['TL_CONFIG']['datimFormat'],$arrRow['tstamp']) . '</p>' . "\n";
 		
 	}
 	
@@ -395,15 +395,15 @@ return $return;
 		// Get date
 		if ($span > 0)
 		{
-			$objEventRow->date = $this->parseDate($GLOBALS['TL_CONFIG'][($objEventRow->addTime ? 'datimFormat' : 'dateFormat')], $objEventRow->startTime) . ' - ' . $this->parseDate($GLOBALS['TL_CONFIG'][($objEventRow->addTime ? 'datimFormat' : 'dateFormat')], $objEventRow->endTime);
+			$objEventRow->date = \Date::parse($GLOBALS['TL_CONFIG'][($objEventRow->addTime ? 'datimFormat' : 'dateFormat')], $objEventRow->startTime) . ' - ' . \Date::parse($GLOBALS['TL_CONFIG'][($objEventRow->addTime ? 'datimFormat' : 'dateFormat')], $objEventRow->endTime);
 		}
 		elseif ($objEventRow->startTime == $objEventRow->endTime)
 		{
-			$objEventRow->date = $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $objEventRow->startTime) . ($objEventRow->addTime ? ' (' . $this->parseDate($GLOBALS['TL_CONFIG']['timeFormat'], $objEventRow->startTime) . ')' : '');
+			$objEventRow->date = \Date::parse($GLOBALS['TL_CONFIG']['dateFormat'], $objEventRow->startTime) . ($objEventRow->addTime ? ' (' . \Date::parse($GLOBALS['TL_CONFIG']['timeFormat'], $objEventRow->startTime) . ')' : '');
 		}
 		else
 		{
-			$objEventRow->date = $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $objEventRow->startTime) . ($objEventRow->addTime ? ' (' . $this->parseDate($GLOBALS['TL_CONFIG']['timeFormat'], $objEventRow->startTime) . ' - ' . $this->parseDate($GLOBALS['TL_CONFIG']['timeFormat'], $objEventRow->endTime) . ')' : '');
+			$objEventRow->date = \Date::parse($GLOBALS['TL_CONFIG']['dateFormat'], $objEventRow->startTime) . ($objEventRow->addTime ? ' (' . \Date::parse($GLOBALS['TL_CONFIG']['timeFormat'], $objEventRow->startTime) . ' - ' . \Date::parse($GLOBALS['TL_CONFIG']['timeFormat'], $objEventRow->endTime) . ')' : '');
 		}
 		
 		$objEventRow->url = $this->generateEventUrl($objEventRow,$this->generateFrontendUrl(array('id'=>$objEventRow->pageId,'alias'=>$objEventRow->pageAlias), 'events/%s'));
