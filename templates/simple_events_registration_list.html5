@@ -1,5 +1,8 @@
+
 <div class="ser_event_list">
-	<h2><?php echo $this->listHeadline; ?></h2>
+	<?php if ($this->listHeadline): ?>
+	  <h2><?php echo $this->listHeadline; ?></h2>
+	<?php endif ?>
 	<?php if($this->blnShowList): ?>
 		<table cellspacing="0" cellpadding="0" class="sortable" id="<?php echo $this->listid; ?>" summary="<?php echo $this->listsummary; ?>">
 			<thead>
