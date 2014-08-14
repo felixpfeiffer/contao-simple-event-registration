@@ -165,7 +165,7 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 						do
 						{
 							$key = $arrReg['lastname'] . ++$z;
-						} while(array_key_exists($key,$arrRegistrations));
+						} while($this->nameExist($key,$arrRegistrations));
 
 					}	
 				}
@@ -182,7 +182,7 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 					do
 					{
 						$key = $arrReg['lastname'] . ++$z;
-					} while(array_key_exists($key,$arrRegistrations));
+					} while($this->nameExist($key,$arrRegistrations));
 
 				}
 				
@@ -226,6 +226,14 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 		}
 	
 		return $objTemplate->parse();
+	}
+	
+	protected function nameExist($strToCheck, $arrToCheck)
+	{
+		foreach($arrToCheck as $k=>$v)
+		{
+			return array_key_exists($strToCheck,$arrToCheck[$k]);
+		}
 	}
 	
 	protected function parseRegistration($objEvent)
