@@ -1,15 +1,9 @@
 <?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
 
 /**
- * TYPOlight webCMS
+ * Contao Open Source CMS
  *
- * The TYPOlight webCMS is an accessible web content management system that 
- * specializes in accessibility and generates W3C-compliant HTML code. It 
- * provides a wide range of functionality to develop professional websites 
- * including a built-in search engine, form generator, file and user manager, 
- * CSS engine, multi-language support and many more. For more information and 
- * additional TYPOlight applications like the TYPOlight MVC Framework please 
- * visit the project website http://www.typolight.org.
+ * Copyright (c) 2005-2014 Leo Feyer
  *
  * PHP version 5
  * @copyright  2010 Felix Pfeiffer : Neue Medien 
@@ -207,8 +201,8 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
                 $arrRegistrations[$k] = $v;
 
             }
-			ksort($arrRegistrations);
-			$arrRegistrations[0] = array_merge($arrRegistrations[0],$arrAnonym);
+            ksort($arrRegistrations);
+            $arrRegistrations[0] = array_merge($arrRegistrations[0],$arrAnonym);
             foreach($arrRegistrations as $k=>$v)
             {
                 $j=0;
@@ -230,10 +224,14 @@ class ModuleSimpleEventRegistration extends ModuleEventReader
 	
 	protected function nameExist($strToCheck, $arrToCheck)
 	{
+		$i =0;
 		foreach($arrToCheck as $k=>$v)
 		{
-			return array_key_exists($strToCheck,$arrToCheck[$k]);
+			if (array_key_exists($strToCheck,$arrToCheck[$k]))
+				$i++;
 		}
+		$i = ($i > 0)? true : false;
+		return $i;
 	}
 	
 	protected function parseRegistration($objEvent)
