@@ -58,11 +58,11 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_register'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_calendar_events']['ser_register'],
 	'exclude'                 => true,
-	'default'                 => '0',
+	'default'                 => false,
 	'inputType'               => 'checkbox',
 	'filter'                  => true,
 	'eval'                    => array('submitOnChange'=>true),
-    'sql'                     => "char(1) NOT NULL default '0'"
+    'sql'                     => "char(1) NOT NULL default ''"
 );
 			
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_places'] = array
