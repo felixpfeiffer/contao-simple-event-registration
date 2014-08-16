@@ -120,7 +120,7 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_show'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_calendar_events']['ser_show'],
 	'exclude'                 => true,
-	'default'                 => '0',
+	'default'                 => false,
 	'inputType'               => 'checkbox',
 	'filter'                  => true,
 	'eval'                    => array('submitOnChange'=>true),
