@@ -308,7 +308,6 @@ class tl_simple_event_registration extends tl_calendar_events
         if(!$arrRow['ser_register']) return $strReturn;
 
         $this->loadLanguageFile('tl_calendar_events');
-        $this->loadLanguageFile('tl_calendar_events');
 
         $objTemplate = new BackendTemplate('be_ser_overview');
 
