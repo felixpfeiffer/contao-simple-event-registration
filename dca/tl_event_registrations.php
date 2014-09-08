@@ -540,7 +540,7 @@ return $return;
 	    $objVersions->initialize();
 
         // Update the database
-        $this->Database->prepare("UPDATE tl_event_registrations SET tstamp=". time() .", waitinglist=".($blnVisible ? 0 : 1)." WHERE id=?")
+        $this->Database->prepare("UPDATE tl_event_registrations SET tstamp=". time() .", waitinglist=".($blnVisible ? '' : 1)." WHERE id=?")
             ->execute($intId);
 
 	$objVersions->create();
