@@ -145,7 +145,7 @@ $GLOBALS['TL_DCA']['tl_event_registrations'] = array
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array(),
-            'sql'                     => "char(1) NOT NULL default '0'"
+            'sql'                     => "char(1) NOT NULL default ''"
 		),
 		'firstname' => array
 		(
