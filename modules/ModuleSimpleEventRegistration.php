@@ -1,15 +1,9 @@
 <?php
 
 /**
- * TYPOlight webCMS
+ * Contao Open Source CMS
  *
- * The TYPOlight webCMS is an accessible web content management system that 
- * specializes in accessibility and generates W3C-compliant HTML code. It 
- * provides a wide range of functionality to develop professional websites 
- * including a built-in search engine, form generator, file and user manager, 
- * CSS engine, multi-language support and many more. For more information and 
- * additional TYPOlight applications like the TYPOlight MVC Framework please 
- * visit the project website http://www.typolight.org.
+ * Copyright (c) 2005-2014 Leo Feyer
  *
  * PHP version 5
  * @copyright  2010 - 2014 Felix Pfeiffer : Neue Medien
@@ -165,7 +159,7 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
 						do
 						{
 							$key = $arrReg['lastname'] . ++$z;
-						} while(array_key_exists($key,$arrRegistrations));
+						} while($this->nameExist($key,$arrRegistrations));
 
 					}	
 				}
@@ -182,7 +176,7 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
 					do
 					{
 						$key = $arrReg['lastname'] . ++$z;
-					} while(array_key_exists($key,$arrRegistrations));
+					} while($this->nameExist($key,$arrRegistrations));
 
 				}
 				
@@ -226,6 +220,14 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
 		}
 	
 		return $objTemplate->parse();
+	}
+	
+	protected function nameExist($strToCheck, $arrToCheck)
+	{
+		foreach($arrToCheck as $k=>$v)
+		{
+			return array_key_exists($strToCheck,$arrToCheck[$k]);
+		}
 	}
 	
 	protected function parseRegistration($objEvent)
