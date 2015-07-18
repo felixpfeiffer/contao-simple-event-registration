@@ -1,17 +1,9 @@
 <?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
 
 /**
- * TYPOlight webCMS
+ * Contao Open Source CMS
  *
- * The TYPOlight webCMS is an accessible web content management system that 
- * specializes in accessibility and generates W3C-compliant HTML code. It 
- * provides a wide rec_interval of functionality to develop professional websites 
- * including a built-in search engine, form generator, file and user manager, 
- * CSS engine, multi-language support and many more. For more information and 
- * additional TYPOlight applications like the TYPOlight MVC Framework please 
- * visit the project website http://www.typolight.org.
- *
- * This is the data container array that extends the table tl_calendar_events.
+ * Copyright (c) 2005-2014 Leo Feyer
  *
  * PHP version 5
  * @copyright  Thyon Design 2005
@@ -66,7 +58,7 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_register'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_calendar_events']['ser_register'],
 	'exclude'                 => true,
-	'default'                 => '0',
+	'default'                 => false,
 	'inputType'               => 'checkbox',
 	'filter'                  => true,
 	'eval'                    => array('submitOnChange'=>true),
@@ -128,7 +120,7 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_show'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_calendar_events']['ser_show'],
 	'exclude'                 => true,
-	'default'                 => '0',
+	'default'                 => false,
 	'inputType'               => 'checkbox',
 	'filter'                  => true,
 	'eval'                    => array('submitOnChange'=>true),
@@ -172,16 +164,16 @@ class tl_simple_event_registration extends tl_calendar_events
 	{
 		if ($row['ser_register'] == 1) {
 			// send to tl_form_auto editing => set formId as the id to edit 
-			return '<a href="'.$this->addToUrl($href.'&id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+			return '<a href="'.$this->addToUrl($href.'&id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ';
 		} else {
-			return $this->generateImage('system/modules/simple_event_registration/assets/reg_user_list_inaktiv.png', $label);
+			return \Image::getHtml('system/modules/simple_event_registration/assets/reg_user_list_inaktiv.png', $label);
 		}
 	}
 	
 	public function splitRecurringButton($row, $href, $label, $title, $icon, $attributes)
 	{
 		if ($row['recurring'] == 1) {
-			return '<a href="'.$this->addToUrl($href.'&id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+			return '<a href="'.$this->addToUrl($href.'&id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.\Image::getHtml($icon, $label).'</a> ';
 		} else {
 			return '';
 		}
