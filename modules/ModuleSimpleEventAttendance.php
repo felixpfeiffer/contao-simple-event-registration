@@ -103,7 +103,7 @@ class ModuleSimpleEventAttendance extends \Events
 	{
 		global $objPage;
 
-        $this->import('String');
+        $this->import('StringUtil');
 		$this->import('Date');
 		
 		$this->strUrl = '';
