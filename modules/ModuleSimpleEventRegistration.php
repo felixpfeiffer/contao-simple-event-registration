@@ -491,7 +491,7 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
 	{
 		global $objPage;
 		
-		$this->import('String');
+		$this->import('StringUtil');
 
         $strUrl = $this->generateFrontendUrl(array('id'=>$objPage->id,'alias'=>$objPage->alias), '/events/%s');
         $objEvent->url = $this->generateEventUrl($objEvent, $strUrl);
@@ -511,7 +511,7 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
         foreach($arrEvent as $k=>$v)
         {
             $key = 'event_'.$k;
-            $arrData[$key] = $this->String->decodeEntities($v);
+            $arrData[$key] = $this->StringUtil->decodeEntities($v);
         }
 
         if($intQuantity)
@@ -519,7 +519,7 @@ class ModuleSimpleEventRegistration extends \ModuleEventReader
             $arrData['ser_quantity'] = $intQuantity;
         }
 
-        $text = \String::parseSimpleTokens($text, $arrData);
+        $text = \StringUtil::parseSimpleTokens($text, $arrData);
 
         $text = $this->replaceInsertTags($text);
 
