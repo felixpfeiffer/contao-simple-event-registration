@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
 
 /**
  * TYPOlight webCMS
@@ -12,22 +12,23 @@
  * visit the project website http://www.typolight.org.
  *
  * PHP version 5
- * @copyright  2010 Felix Pfeiffer : Neue Medien 
+ * @copyright  2010 - 2014 Felix Pfeiffer : Neue Medien
  * @author     Felix Pfeiffer 
  * @package    simple_event_registration 
  * @filesource
  */
 
+namespace FelixPfeiffer\SimpleEventRegistration;
 
 /**
  * Class ModuleSimpleEventAttendance
  *
  * Front end module "ModuleSimpleEventAttendance".
- * @copyright  2010 Felix Pfeiffer : Neue Medien 
+ * @copyright  2010 - 2014 Felix Pfeiffer : Neue Medien
  * @author     Felix Pfeiffer 
  * @package    simple_event_registration 
  */
-class ModuleSimpleEventAttendance extends Events
+class ModuleSimpleEventAttendance extends \Events
 {
 
 	/**
@@ -58,7 +59,7 @@ class ModuleSimpleEventAttendance extends Events
 	{
 		if (TL_MODE == 'BE')
 		{
-			$objTemplate = new BackendTemplate('be_wildcard');
+			$objTemplate = new \BackendTemplate('be_wildcard');
 
 			$objTemplate->wildcard = '### SIMPLE EVENT ATTENDANCE ###';
 			$objTemplate->title = $this->headline;
@@ -100,22 +101,23 @@ class ModuleSimpleEventAttendance extends Events
 	 */
 	protected function compile()
 	{
-		$this->import('String');
+		global $objPage;
+
+        $this->import('String');
 		$this->import('Date');
 		
 		$this->strUrl = '';
-		
+
 		if($this->jumpTo != '')
 		{
 			// Get "jumpTo" page
-			$objPage = $this->Database->prepare("SELECT id, alias FROM tl_page WHERE id=?")
-									  ->limit(1)
-									  ->execute($this->jumpTo);
+            $objJTPage = \PageModel::findByPk($this->jumpTo);
 
-			if ($objPage->numRows)
+			if ($objJTPage)
 			{
-				$this->strUrl = $this->generateFrontendUrl($objPage->row(), '/events/%s');
+				$this->strUrl = $this->generateFrontendUrl($objJTPage->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/%s' : '/events/%s'));
 			}
+
 		}
 
 		$strStmt = "SELECT e.*, c.jumpTo AS calJumpTo, c.id AS calId FROM tl_event_registrations r, tl_calendar_events e, tl_calendar c WHERE r.userId=? AND e.id=r.pid AND c.id=e.pid";
@@ -129,7 +131,7 @@ class ModuleSimpleEventAttendance extends Events
 			$strStmt .= " AND e.endTime<" . $this->Date->dayEnd;;
 		}
 		
-		$objAttendance = $this->Database->prepare($strStmt)
+		$objAttendance = \Database::getInstance()->prepare($strStmt)
 										->execute($this->User->id);
 		
 		
@@ -145,16 +147,14 @@ class ModuleSimpleEventAttendance extends Events
 			{
 				$strUrl = $this->strUrl;
 				
-				if($objAttendance->calJumpTo != '')
+				if($objAttendance->calJumpTo)
 				{
 					// Get "jumpTo" page
-					$objPage = $this->Database->prepare("SELECT id, alias FROM tl_page WHERE id=?")
-											  ->limit(1)
-											  ->execute($objAttendance->calJumpTo);
+                    $objJTPage = \PageModel::findByPk($objAttendance->calJumpTo);
 
-					if ($objPage->numRows)
+					if ($objJTPage)
 					{
-						$strUrl = $this->generateFrontendUrl($objPage->row(), '/events/%s');
+						$strUrl = $this->generateFrontendUrl($objJTPage->row(), (($GLOBALS['TL_CONFIG']['useAutoItem'] && !$GLOBALS['TL_CONFIG']['disableAlias']) ?  '/%s' : '/events/%s'));
 					}
 				}
 				
@@ -168,7 +168,7 @@ class ModuleSimpleEventAttendance extends Events
 			{
 				ksort($this->arrEvents[$key]);
 			}
-			
+
 			$arrEvents = array();
 			$arrEventIds = array();
 			// Remove events outside the scope
@@ -181,7 +181,7 @@ class ModuleSimpleEventAttendance extends Events
 					{
 						if(in_array($event['id'],$arrEventIds)) continue;
 						$event['firstDay'] = $GLOBALS['TL_LANG']['DAYS'][date('w', $day)];
-						$event['firstDate'] = $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $day);
+						$event['firstDate'] = \Date::parse($objPage->dateFormat, $day);
 						$arrEventIds[] = $event['id'];
 						$arrEvents[] = $event;
 					}
@@ -192,30 +192,60 @@ class ModuleSimpleEventAttendance extends Events
 			$limit = $total;
 			$offset = 0;
 
-			// Pagination
-			if ($this->perPage > 0)
-			{
-				$page = $this->Input->get('page') ? $this->Input->get('page') : 1;
-				$offset = ($page - 1) * $this->perPage;
-				$limit = min($this->perPage + $offset, $total);
+            // Pagination
+            if ($this->perPage > 0)
+            {
+                $id = 'page_e' . $this->id;
+                $page = \Input::get($id) ?: 1;
 
-				$objPagination = new Pagination($total, $this->perPage);
-				$this->Template->pagination = $objPagination->generate("\n  ");
-			}
-			
+                // Do not index or cache the page if the page number is outside the range
+                if ($page < 1 || $page > max(ceil($total/$this->perPage), 1))
+                {
+                    $objPage->noSearch = 1;
+                    $objPage->cache = 0;
+
+                    // Send a 404 header
+                    header('HTTP/1.1 404 Not Found');
+                    return;
+                }
+
+                $offset = ($page - 1) * $this->perPage;
+                $limit = min($this->perPage + $offset, $total);
+
+                $objPagination = new \Pagination($total, $this->perPage, $GLOBALS['TL_CONFIG']['maxPaginationLinks'], $id);
+                $this->Template->pagination = $objPagination->generate("\n  ");
+            }
+
 			$count  = count($arrEvents);
-			
+            $strMonth = '';
+            $strDate = '';
+            $strEvents = '';
+            $dayCount = 0;
+            $eventCount = 0;
+            $headerCount = 0;
+            $imgSize = false;
+
 			// Parse events
 			for ($i=$offset; $i<$limit; $i++)
 			{
-				
+
 				$event = $arrEvents[$i];
-				
-				$objTemplate = new FrontendTemplate($this->cal_template);
-				$objTemplate->setData($event);
+
+                $objTemplate = new \FrontendTemplate($this->cal_template);
+                $objTemplate->setData($event);
+
+                // Day header
+                if ($strDate != $event['firstDate'])
+                {
+                    $headerCount = 0;
+                    $objTemplate->header = true;
+                    $objTemplate->classHeader = ((($dayCount % 2) == 0) ? ' even' : ' odd') . (($dayCount == 0) ? ' first' : '') . (($event['firstDate'] == $arrEvents[($limit-1)]['firstDate']) ? ' last' : '');
+                    $strDate = $event['firstDate'];
+
+                    ++$dayCount;
+                }
 
 				// Add template variables
-				$objTemplate->link = $event['href'];
 				$objTemplate->classUpcoming = $objTemplate->classList = $event['class'] . ((($i % 2) == 0) ? ' even' : ' last') . (($i == $offset) ? ' first' : '') . ($i==$limit-1 ? ' last' : '') . ' cal_' . $event['parent'];
 				
 				$objTemplate->readMore = specialchars(sprintf($GLOBALS['TL_LANG']['MSC']['readMore'], $event['title']));
@@ -237,16 +267,29 @@ class ModuleSimpleEventAttendance extends Events
 
 				$objTemplate->addImage = false;
 
-				// Add image
-				if ($event['addImage'] && is_file(TL_ROOT . '/' . $event['singleSRC']))
-				{
-					if ($imgSize)
-					{
-						$event['size'] = $imgSize;
-					}
+                // Add an image
+                if ($event['addImage'] && $event['singleSRC'] != '')
+                {
+                    $objModel = \FilesModel::findByUuid($event['singleSRC']);
 
-					$this->addImageToTemplate($objTemplate, $event);
-				}
+                    if ($objModel === null)
+                    {
+                        if (!\Validator::isUuid($event['singleSRC']))
+                        {
+                            $objTemplate->text = '<p class="error">'.$GLOBALS['TL_LANG']['ERR']['version2format'].'</p>';
+                        }
+                    }
+                    elseif (is_file(TL_ROOT . '/' . $objModel->path))
+                    {
+                        if ($imgSize)
+                        {
+                            $event['size'] = $imgSize;
+                        }
+
+                        $event['singleSRC'] = $objModel->path;
+                        $this->addImageToTemplate($objTemplate, $event);
+                    }
+                }
 
 				$objTemplate->enclosure = array();
 
@@ -257,6 +300,9 @@ class ModuleSimpleEventAttendance extends Events
 				}
 				
 				$strEvents .= $objTemplate->parse();
+
+                ++$eventCount;
+                ++$headerCount;
 			}
 					
 		}
@@ -292,5 +338,3 @@ class ModuleSimpleEventAttendance extends Events
 	}
 
 }
-
-?>

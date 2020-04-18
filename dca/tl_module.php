@@ -48,20 +48,23 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['ser_showevents'] = array(
 	'exclude'                 => true,
 	'inputType'               => 'select',
 	'options'        		  => array('all','future','past'),
-	'reference'				  => &$GLOBALS['TL_LANG']['tl_module']['ser_showevents_label']
+	'reference'				  => &$GLOBALS['TL_LANG']['tl_module']['ser_showevents_label'],
+    'sql'                     => "varchar(255) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['ser_quantity'] = array(
 	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['ser_quantity'],
 	'exclude'                 => true,
-	'inputType'               => 'checkbox'
+	'inputType'               => 'checkbox',
+    'sql'                     => "char(1) NOT NULL default '0'"
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['ser_waitinglist'] = array(
 	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['ser_waitinglist'],
 	'exclude'                 => true,
 	'inputType'               => 'checkbox',
-    'eval'                    => array('doNotCopy'=>true)
+    'eval'                    => array('doNotCopy'=>true),
+    'sql'                     => "char(1) NOT NULL default '0'"
 );
 
 

@@ -19,7 +19,7 @@
  * Software Foundation website at http://www.gnu.org/licenses/.
  *
  * PHP version 5
- * @copyright  2010 Felix Pfeiffer : Neue Medien 
+ * @copyright  2010 - 2014 Felix Pfeiffer : Neue Medien
  * @author     Felix Pfeiffer 
  * @package    Language
  * @license    LGPL 

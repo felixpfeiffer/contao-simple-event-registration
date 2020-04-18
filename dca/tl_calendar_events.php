@@ -31,14 +31,14 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['list']['sorting']['child_record_callba
 $GLOBALS['TL_DCA']['tl_calendar_events']['list']['operations']['registrations'] = array(
 	'label'               => &$GLOBALS['TL_LANG']['tl_calendar_events']['registrations'],
 	'href'                => 'table=tl_event_registrations',
-	'icon'                => 'system/modules/simple_event_registration/html/reg_user_list.png',
+	'icon'                => 'system/modules/simple_event_registration/assets/reg_user_list.png',
     'button_callback'     => array('tl_simple_event_registration', 'groupButton')
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['list']['operations']['serrecurring'] = array(
 	'label'               => &$GLOBALS['TL_LANG']['tl_calendar_events']['serrecurring'],
 	'href'                => 'key=splitRecurring',
-	'icon'                => 'system/modules/simple_event_registration/html/split_recurring.png',
+	'icon'                => 'system/modules/simple_event_registration/assets/split_recurring.png',
     'button_callback'     => array('tl_simple_event_registration', 'splitRecurringButton')
 );
  
@@ -53,8 +53,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['palettes']['default'] = $GLOBALS['TL_D
 
 array_insert($GLOBALS['TL_DCA']['tl_calendar_events']['subpalettes'], 2, array
 	(
-			'ser_register'								=> 'ser_places,ser_maxplaces,ser_date,ser_email,ser_groups',
-			'ser_show'								=> 'ser_showheadline,ser_showgroups'
+			'ser_register'		=> 'ser_places,ser_maxplaces,ser_date,ser_email,ser_groups',
+			'ser_show'			=> 'ser_showheadline,ser_showgroups'
 	)
 );
 
@@ -69,7 +69,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_register'] = array
 	'default'                 => '0',
 	'inputType'               => 'checkbox',
 	'filter'                  => true,
-	'eval'                    => array('submitOnChange'=>true)
+	'eval'                    => array('submitOnChange'=>true),
+    'sql'                     => "char(1) NOT NULL default ''"
 );
 			
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_places'] = array
@@ -78,7 +79,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_places'] = array
 	'exclude'                 => true,
 	'inputType'               => 'text',
 	'default'				  => 10,
-	'eval'                    => array('tl_class'=>'w50')
+	'eval'                    => array('tl_class'=>'w50'),
+    'sql'                     => "int(10) unsigned NOT NULL default '0'"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_maxplaces'] = array
@@ -87,7 +89,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_maxplaces'] = array
 	'exclude'                 => true,
 	'inputType'               => 'text',
 	'default'				  => 10,
-	'eval'                    => array('tl_class'=>'w50')
+	'eval'                    => array('tl_class'=>'w50'),
+    'sql'                     => "int(10) unsigned NOT NULL default '0'"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_email'] = array
@@ -96,7 +99,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_email'] = array
 	'exclude'                 => true,
 	'search'                  => true,
 	'inputType'               => 'text',
-	'eval'                    => array('rgxp'=>'friendly', 'maxlength'=>255,'tl_class'=>'clr')
+	'eval'                    => array('rgxp'=>'friendly', 'maxlength'=>255,'tl_class'=>'clr'),
+    'sql'                     => "varchar(255) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_date'] = array
@@ -105,7 +109,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_date'] = array
 	'exclude'                 => true,
 	'default'                 => (time() + 604800),
 	'inputType'               => 'text',
-	'eval'                    => array('rgxp'=>'datim', 'datepicker'=>$this->getDatePickerString(), 'tl_class'=>'w50 wizard')
+	'eval'                    => array('rgxp'=>'datim', 'datepicker'=>$this->getDatePickerString(), 'tl_class'=>'w50 wizard'),
+    'sql'                     => "int(10) unsigned NOT NULL default '0'"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_groups'] = array
@@ -115,7 +120,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_groups'] = array
 	'inputType'               => 'checkbox',
 	'options_callback'        => array('tl_simple_event_registration','getGroups'),
 	/*'foreignKey'              => 'tl_member_group.name',*/
-	'eval'                    => array('multiple'=>true)
+	'eval'                    => array('multiple'=>true),
+    'sql'                     => "blob NULL"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_show'] = array
@@ -125,7 +131,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_show'] = array
 	'default'                 => '0',
 	'inputType'               => 'checkbox',
 	'filter'                  => true,
-	'eval'                    => array('submitOnChange'=>true)
+	'eval'                    => array('submitOnChange'=>true),
+    'sql'                     => "char(1) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_showheadline'] = array
@@ -134,7 +141,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_showheadline'] = array
 	'exclude'                 => true,
 	'search'                  => true,
 	'inputType'               => 'text',
-	'eval'                    => array('maxlength'=>255,'tl_class'=>'clr')
+	'eval'                    => array('maxlength'=>255,'tl_class'=>'clr'),
+    'sql'                     => "varchar(255) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_showgroups'] = array
@@ -144,7 +152,8 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['ser_showgroups'] = array
 	'inputType'               => 'checkbox',
 	'options_callback'        => array('tl_simple_event_registration','getGroups'),
 	/*'foreignKey'              => 'tl_member_group.name',*/
-	'eval'                    => array('multiple'=>true,'tl_class'=>'')
+	'eval'                    => array('multiple'=>true,'tl_class'=>''),
+    'sql'                     => "blob NULL"
 );
 
 /**
@@ -165,7 +174,7 @@ class tl_simple_event_registration extends tl_calendar_events
 			// send to tl_form_auto editing => set formId as the id to edit 
 			return '<a href="'.$this->addToUrl($href.'&id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
 		} else {
-			return $this->generateImage('system/modules/simple_event_registration/html/reg_user_list_inaktiv.png', $label);
+			return $this->generateImage('system/modules/simple_event_registration/assets/reg_user_list_inaktiv.png', $label);
 		}
 	}
 	
@@ -341,9 +350,7 @@ class tl_simple_event_registration extends tl_calendar_events
 
         $strReturn = str_replace(array(' h52'),'',$strReturn);
 
-        $strReturn = substr($strReturn,0,-7);
-
-        $strReturn .= $objTemplate->parse() . '</div>' . "\n";
+        $strReturn .= $objTemplate->parse();
 
 
 
