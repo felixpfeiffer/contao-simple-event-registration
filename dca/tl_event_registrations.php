@@ -552,7 +552,7 @@ return $return;
         {
             $href .= '&amp;tid='.$row['id'].'&amp;state=0';
             $icon = 'invisible.gif';
-            return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+            return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ';
         }
 
         return '';
@@ -567,13 +567,14 @@ return $return;
     public function toggleVisibility($intId, $blnVisible)
     {
 
-        $this->createInitialVersion('tl_event_registrations', $intId);
+        $objVersions = new Versions('tl_event_registrations', $intId);
+	    $objVersions->initialize();
 
         // Update the database
-        $this->Database->prepare("UPDATE tl_event_registrations SET tstamp=". time() .", waitinglist=0 WHERE id=?")
+        $this->Database->prepare("UPDATE tl_event_registrations SET tstamp=". time() .", waitinglist=".($blnVisible ? '' : 1)." WHERE id=?")
             ->execute($intId);
 
-        $this->createNewVersion('tl_event_registrations', $intId);
+	$objVersions->create();
 
     }
 }
